@@ -46,6 +46,41 @@
 //
 // LCD / Controller
 //
+
+/*---------------MKS OLED patch_4-----------------------*/
+#if defined (MKS_OLED96_128x64_FULL_GRAPHICS_CONTROLLER)
+
+
+#ifdef LCD_PINS_D5
+#undef LCD_PINS_D5
+#define LCD_PINS_D5 -1
+#endif
+#ifdef LCD_PINS_D6
+#undef LCD_PINS_D6
+#define LCD_PINS_D6 -1
+#endif
+#define LCD_PINS_RST  27
+#define LCD_PINS_DC   25
+#endif
+/*---------------MKS OLED patch_4-----------------------*/
+
+
+
+// RRD_FAN_EXTENDER PIN6/11
+#if defined (RRD_FAN_EXTENDER)
+  #undef FAN1_PIN
+  #undef FAN2_PIN
+  #define FAN1_PIN 6
+  #define FAN2_PIN 11
+  #ifdef NUM_SERVOS
+    #undef SERVO0_PIN
+    #define SERVO0_PIN 40
+    #if NUM_SERVOS > 1
+      #error Do not support more than 1 servo pin with RRD_FAN_EXTENDER enabled!
+    #endif
+  #endif
+#endif
+
 #if ENABLED(VIKI2) || ENABLED(miniVIKI)
   /**
    * VIKI2 Has two groups of wires with...

@@ -942,6 +942,20 @@ void servo_init() {
   void enableStepperDrivers() { SET_INPUT(STEPPER_RESET_PIN); }  // set to input, which allows it to be pulled high by pullups
 #endif
 
+/*---------------MKS OLED patch_3-----------------------*/
+#if defined (MKS_OLED96_128x64_FULL_GRAPHICS_CONTROLLER)
+  void setup_resetOLED(){
+
+    pinMode(LCD_PINS_DC, OUTPUT);		  
+    pinMode(LCD_PINS_RST, OUTPUT);		
+    digitalWrite(LCD_PINS_RST, LOW);
+    delay(1000);
+    digitalWrite(LCD_PINS_RST, HIGH);
+      
+  }
+#endif  
+
+
 #if ENABLED(EXPERIMENTAL_I2CBUS) && I2C_SLAVE_ADDRESS > 0
 
   void i2c_on_receive(int bytes) { // just echo all bytes received to serial
@@ -10202,6 +10216,10 @@ void setup() {
   #if HAS_STEPPER_RESET
     disableStepperDrivers();
   #endif
+
+  #if defined (MKS_OLED96_128x64_FULL_GRAPHICS_CONTROLLER)
+    setup_resetOLED();
+  #endi
 
   MYSERIAL.begin(BAUDRATE);
   SERIAL_PROTOCOLLNPGM("start");
