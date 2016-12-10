@@ -1042,6 +1042,6 @@
 #else
   #define COUNT_LCD_24 COUNT_LCD_23
 #endif
-#if COUNT_LCD_24 > 1
-  #error "Please select no more than one LCD controller option."
-#endif
+// #if COUNT_LCD_24 > 1
+//   #error "Please select no more than one LCD controller option."
+// #endif

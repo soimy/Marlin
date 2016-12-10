@@ -10219,7 +10219,7 @@ void setup() {
 
   #if defined (MKS_OLED96_128x64_FULL_GRAPHICS_CONTROLLER)
     setup_resetOLED();
-  #endi
+  #endif
 
   MYSERIAL.begin(BAUDRATE);
   SERIAL_PROTOCOLLNPGM("start");

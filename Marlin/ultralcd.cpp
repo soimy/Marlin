@@ -2867,7 +2867,8 @@ void lcd_update() {
       #endif
         !lcd_status_update_delay--
     ) {
-      lcd_status_update_delay = 9;
+      // lcd_status_update_delay = 9;
+      lcd_status_update_delay = (1000 - LCD_UPDATE_INTERVAL) / LCD_UPDATE_INTERVAL;
       lcdDrawUpdate = LCDVIEW_REDRAW_NOW;
     }
 
