@@ -217,7 +217,7 @@
  * Multiple extruders can be assigned to the same pin in which case
  * the fan will turn on when any selected extruder is above the threshold.
  */
-#define E0_AUTO_FAN_PIN -1
+#define E0_AUTO_FAN_PIN 11 
 #define E1_AUTO_FAN_PIN -1
 #define E2_AUTO_FAN_PIN -1
 #define E3_AUTO_FAN_PIN -1
@@ -420,7 +420,7 @@
 // @section lcd
 
 // Include a page of printer information in the LCD Main Menu
-#define LCD_INFO_MENU
+// #define LCD_INFO_MENU
 
 // On the Info Screen, display XY with one decimal place when possible
 //#define LCD_DECIMAL_SMALL_XY
@@ -474,11 +474,11 @@
 
   // A smaller font may be used on the Info Screen. Costs 2300 bytes of PROGMEM.
   // Western only. Not available for Cyrillic, Kana, Turkish, Greek, or Chinese.
-  #define USE_SMALL_INFOFONT
+  // #define USE_SMALL_INFOFONT
 
   // Enable this option and reduce the value to optimize screen updates.
   // The normal delay is 10µs. Use the lowest value that still gives a reliable display.
-  #define DOGM_SPI_DELAY_US 5
+  // #define DOGM_SPI_DELAY_US 5
 #endif // DOGLCD
 
 // @section safety
@@ -529,7 +529,7 @@
 //
 #define ENSURE_SMOOTH_MOVES
 #if ENABLED(ENSURE_SMOOTH_MOVES)
-  //#define ALWAYS_ALLOW_MENU      // If enabled, the menu will always be responsive.
+  #define ALWAYS_ALLOW_MENU      // If enabled, the menu will always be responsive.
                                    // WARNING: Menu navigation during short moves may cause stuttering!
   #define LCD_UPDATE_THRESHOLD 135 // (ms) Minimum duration for the current segment to allow an LCD update.
                                    // Default value is good for graphical LCDs (e.g., REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER).
