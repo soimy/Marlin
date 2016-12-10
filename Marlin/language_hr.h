@@ -37,7 +37,7 @@
 #define MSG_SD_REMOVED                      "SD kartica uklonjena"
 #define MSG_LCD_ENDSTOPS                    "Endstops" // Max length 8 characters
 #define MSG_MAIN                            "Main"
-#define MSG_AUTOSTART                       "Automatsko pokretanje"
+#define MSG_AUTOSTART                       "Auto pokretanje"
 #define MSG_DISABLE_STEPPERS                "Ugasi steppere"
 #define MSG_AUTO_HOME                       "Automatski homing"
 #define MSG_AUTO_HOME_X                     "Home-aj X"
@@ -92,6 +92,7 @@
 #define MSG_PID_I                           "PID-I"
 #define MSG_PID_D                           "PID-D"
 #define MSG_PID_C                           "PID-C"
+#define MSG_SELECT                          "Odaberi"
 #define MSG_ACC                             "Accel"
 #define MSG_VX_JERK                         "Vx-jerk"
 #define MSG_VY_JERK                         "Vy-jerk"
@@ -107,6 +108,10 @@
 #define MSG_YSTEPS                          "Ysteps/mm"
 #define MSG_ZSTEPS                          "Zsteps/mm"
 #define MSG_ESTEPS                          "Esteps/mm"
+#define MSG_E1STEPS                         "E1steps/mm"
+#define MSG_E2STEPS                         "E2steps/mm"
+#define MSG_E3STEPS                         "E3steps/mm"
+#define MSG_E4STEPS                         "E4steps/mm"
 #define MSG_TEMPERATURE                     "Temperature"
 #define MSG_MOTION                          "Gibanje"
 #define MSG_VOLUMETRIC                      "Filament"
@@ -189,8 +194,8 @@
 #if LCD_WIDTH >= 20
   #define MSG_INFO_PRINT_COUNT              "Broj printova"
   #define MSG_INFO_COMPLETED_PRINTS         "Završeni"
-  #define MSG_INFO_PRINT_TIME               "Ukupno vrijeme printanja"
-  #define MSG_INFO_PRINT_LONGEST            "Trajanje najdužeg printa"
+  #define MSG_INFO_PRINT_TIME               "Ukupno printanja"
+  #define MSG_INFO_PRINT_LONGEST            "Najduži print"
   #define MSG_INFO_PRINT_FILAMENT           "Extrudirano ukupno"
 #else
   #define MSG_INFO_PRINT_COUNT              "Printovi"
@@ -206,12 +211,14 @@
 #define MSG_DRIVE_STRENGTH                  "Drive Strength"
 #define MSG_DAC_PERCENT                     "Driver %"
 #define MSG_DAC_EEPROM_WRITE                "DAC EEPROM Write"
+
 #define MSG_FILAMENT_CHANGE_HEADER          "CHANGE FILAMENT"
 #define MSG_FILAMENT_CHANGE_OPTION_HEADER   "CHANGE OPTIONS:"
 #define MSG_FILAMENT_CHANGE_OPTION_EXTRUDE  "Extrudiraj više"
 #define MSG_FILAMENT_CHANGE_OPTION_RESUME   "Nastavi print"
 
 #if LCD_HEIGHT >= 4
+  // Up to 3 lines allowed
   #define MSG_FILAMENT_CHANGE_INIT_1          "Čekaj početak"
   #define MSG_FILAMENT_CHANGE_INIT_2          "filamenta"
   #define MSG_FILAMENT_CHANGE_INIT_3          "promijeni"
@@ -227,6 +234,7 @@
   #define MSG_FILAMENT_CHANGE_RESUME_1        "Wait for print"
   #define MSG_FILAMENT_CHANGE_RESUME_2        "to resume"
 #else // LCD_HEIGHT < 4
+  // Up to 2 lines allowed
   #define MSG_FILAMENT_CHANGE_INIT_1          "Pričekaj..."
   #define MSG_FILAMENT_CHANGE_UNLOAD_1        "Ejecting..."
   #define MSG_FILAMENT_CHANGE_INSERT_1        "Insert and Click"
