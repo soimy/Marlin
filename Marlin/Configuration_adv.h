@@ -225,11 +225,11 @@
 #define EXTRUDER_AUTO_FAN_SPEED   255  // == full speed
 
 // Define a pin to turn case light on/off
-//#define CASE_LIGHT_PIN 4
+#define CASE_LIGHT_PIN 42
 #if PIN_EXISTS(CASE_LIGHT)
   #define INVERT_CASE_LIGHT false   // Set to true if HIGH is the OFF state (active low)
-  //#define CASE_LIGHT_DEFAULT_ON   // Uncomment to set default state to on
-  //#define MENU_ITEM_CASE_LIGHT    // Uncomment to have a Case Light On / Off entry in main menu
+  #define CASE_LIGHT_DEFAULT_ON   // Uncomment to set default state to on
+  #define MENU_ITEM_CASE_LIGHT    // Uncomment to have a Case Light On / Off entry in main menu
 #endif
 
 //===========================================================================
@@ -529,7 +529,7 @@
 //
 #define ENSURE_SMOOTH_MOVES
 #if ENABLED(ENSURE_SMOOTH_MOVES)
-  #define ALWAYS_ALLOW_MENU      // If enabled, the menu will always be responsive.
+  // #define ALWAYS_ALLOW_MENU      // If enabled, the menu will always be responsive.
                                    // WARNING: Menu navigation during short moves may cause stuttering!
   #define LCD_UPDATE_THRESHOLD 135 // (ms) Minimum duration for the current segment to allow an LCD update.
                                    // Default value is good for graphical LCDs (e.g., REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER).

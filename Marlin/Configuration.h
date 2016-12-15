@@ -122,7 +122,7 @@
  *
  * :[2400, 9600, 19200, 38400, 57600, 115200, 250000]
  */
-#define BAUDRATE 250000
+#define BAUDRATE 57600 
 
 // Enable the Bluetooth serial interface on AT90USB devices
 //#define BLUETOOTH
@@ -486,14 +486,14 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2[, E3]]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 320, 320, 400, 470}
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 320, 320, 400, 500}
 
 /**
  * Default Max Feed Rate (mm/s)
  * Override with M203
  *                                      X, Y, Z, E0 [, E1[, E2[, E3]]]
  */
-#define DEFAULT_MAX_FEEDRATE          { 300, 300, 30, 25 }
+#define DEFAULT_MAX_FEEDRATE          { 100, 100, 30, 25 }
 
 /**
  * Default Max Acceleration (change/s) change = mm/s
@@ -808,8 +808,8 @@
   #define ABL_GRID_POINTS_Y ABL_GRID_POINTS_X
 
   // Set the boundaries for probing (where the probe can reach).
-  #define LEFT_PROBE_BED_POSITION 15
-  #define RIGHT_PROBE_BED_POSITION 190
+  #define LEFT_PROBE_BED_POSITION 30
+  #define RIGHT_PROBE_BED_POSITION 205 
   #define FRONT_PROBE_BED_POSITION 10
   #define BACK_PROBE_BED_POSITION 180
 
