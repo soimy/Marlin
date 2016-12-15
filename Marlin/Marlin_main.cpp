@@ -760,8 +760,8 @@ inline void sync_plan_position_e() { planner.set_e_position_mm(current_position[
   int freeMemory() { return SdFatUtil::FreeRam(); }
 #else
 extern "C" {
-  extern unsigned int __bss_end;
-  extern unsigned int __heap_start;
+  extern char __bss_end;
+  extern char __heap_start;
   extern void* __brkval;
 
   int freeMemory() {
@@ -2191,6 +2191,11 @@ static void clean_up_after_endstop_or_probe_move() {
 
     float old_feedrate_mm_s = feedrate_mm_s;
 
+    #if ENABLED(DELTA)
+      if (current_position[Z_AXIS] > delta_clip_start_height)
+        do_blocking_move_to_z(delta_clip_start_height);
+    #endif
+
     // Ensure a minimum height before moving the probe
     do_probe_raise(Z_CLEARANCE_BETWEEN_PROBES);
 
@@ -2750,6 +2755,8 @@ static void homeaxis(AxisEnum axis) {
 
   void retract(bool retracting, bool swapping = false) {
 
+    static float hop_height;
+
     if (retracting == retracted[active_extruder]) return;
 
     float old_feedrate_mm_s = feedrate_mm_s;
@@ -2764,14 +2771,19 @@ static void homeaxis(AxisEnum axis) {
       prepare_move_to_destination();
 
       if (retract_zlift > 0.01) {
+        hop_height = current_position[Z_AXIS];
+        // Pretend current position is lower
         current_position[Z_AXIS] -= retract_zlift;
         SYNC_PLAN_POSITION_KINEMATIC();
+        // Raise up to the old current_position
         prepare_move_to_destination();
       }
     }
     else {
 
-      if (retract_zlift > 0.01) {
+      // If the height hasn't been altered, undo the Z hop
+      if (retract_zlift > 0.01 && hop_height == current_position[Z_AXIS]) {
+        // Pretend current position is higher. Z will lower on the next move
         current_position[Z_AXIS] += retract_zlift;
         SYNC_PLAN_POSITION_KINEMATIC();
       }
@@ -2780,6 +2792,8 @@ static void homeaxis(AxisEnum axis) {
       float move_e = swapping ? retract_length_swap + retract_recover_length_swap : retract_length + retract_recover_length;
       current_position[E_AXIS] -= move_e / volumetric_multiplier[active_extruder];
       sync_plan_position_e();
+
+      // Lower Z and recover E
       prepare_move_to_destination();
     }
 

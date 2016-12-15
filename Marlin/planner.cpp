@@ -145,7 +145,7 @@ float Planner::previous_speed[NUM_AXIS],
         Planner::position_float[NUM_AXIS] = { 0 };
 #endif
 
-#if ENABLED(ENSURE_SMOOTH_MOVES)
+#if ENABLED(ULTRA_LCD)
   volatile uint32_t Planner::block_buffer_runtime_us = 0;
 #endif
 
@@ -556,8 +556,6 @@ void Planner::check_axes_activity() {
       }
       else
         z_fade_factor = 1.0;
-    #else
-        constexpr float z_fade_factor = 1.0;
     #endif
 
     #if ENABLED(MESH_BED_LEVELING)
@@ -584,7 +582,11 @@ void Planner::check_axes_activity() {
     #elif ENABLED(AUTO_BED_LEVELING_BILINEAR)
 
       float tmp[XYZ] = { lx, ly, 0 };
-      lz += bilinear_z_offset(tmp) * z_fade_factor;
+      lz += bilinear_z_offset(tmp)
+        #if ENABLED(ENABLE_LEVELING_FADE_HEIGHT)
+          * z_fade_factor
+        #endif
+      ;
 
     #endif
   }
@@ -983,30 +985,21 @@ void Planner::_buffer_line(const float &a, const float &b, const float &c, const
   const uint8_t moves_queued = movesplanned();
 
   // Slow down when the buffer starts to empty, rather than wait at the corner for a buffer refill
+  unsigned long segment_time = lround(1000000.0 / inverse_mm_s);
   #if ENABLED(SLOWDOWN)
     // Segment time im micro seconds
-    unsigned long segment_time = lround(1000000.0 / inverse_mm_s);
     if (moves_queued > 1 && moves_queued < (BLOCK_BUFFER_SIZE) / 2) {
       if (segment_time < min_segment_time) {
         // buffer is draining, add extra time.  The amount of time added increases if the buffer is still emptied more.
         inverse_mm_s = 1000000.0 / (segment_time + lround(2 * (min_segment_time - segment_time) / moves_queued));
-        #if defined(XY_FREQUENCY_LIMIT) || ENABLED(ENSURE_SMOOTH_MOVES)
+        #if defined(XY_FREQUENCY_LIMIT) || ENABLED(ULTRA_LCD)
           segment_time = lround(1000000.0 / inverse_mm_s);
         #endif
       }
     }
   #endif
-  
-  #if ENABLED(ENSURE_SMOOTH_MOVES)
-    #if DISABLED(SLOWDOWN)
-      unsigned long segment_time = lround(1000000.0 / inverse_mm_s);
-    #endif
-    if (segment_time < (MIN_BLOCK_TIME) * 1000UL) {
-      // buffer will be draining, set to MIN_BLOCK_TIME.
-      inverse_mm_s = 1000000.0 / (1000.0 * (MIN_BLOCK_TIME));
-      segment_time = (MIN_BLOCK_TIME) * 1000UL;
-    }
-    block->segment_time = segment_time;
+
+  #if ENABLED(ULTRA_LCD)
     CRITICAL_SECTION_START
       block_buffer_runtime_us += segment_time;
     CRITICAL_SECTION_END
