@@ -51,6 +51,12 @@
 #ifndef MSG_DISABLE_STEPPERS
   #define MSG_DISABLE_STEPPERS                _UxGT("Disable steppers")
 #endif
+#ifndef MSG_DEBUG_MENU
+  #define MSG_DEBUG_MENU                      _UxGT("Debug Menu")
+#endif
+#ifndef MSG_PROGRESS_BAR_TEST
+  #define MSG_PROGRESS_BAR_TEST               _UxGT("Progress Bar Test")
+#endif
 #ifndef MSG_AUTO_HOME
   #define MSG_AUTO_HOME                       _UxGT("Auto home")
 #endif
@@ -139,10 +145,10 @@
   #define MSG_LEVEL_BED                       _UxGT("Level bed")
 #endif
 #ifndef MSG_MOVING
-  #define MSG_MOVING                          "Moving..."
+  #define MSG_MOVING                          _UxGT("Moving...")
 #endif
 #ifndef MSG_FREE_XY
-  #define MSG_FREE_XY                         "Free XY"
+  #define MSG_FREE_XY                         _UxGT("Free XY")
 #endif
 #ifndef MSG_MOVE_X
   #define MSG_MOVE_X                          _UxGT("Move X")
@@ -364,10 +370,10 @@
   #define MSG_CONTROL_RETRACT_ZLIFT           _UxGT("Hop mm")
 #endif
 #ifndef MSG_CONTROL_RETRACT_RECOVER
-  #define MSG_CONTROL_RETRACT_RECOVER         _UxGT("UnRet +mm")
+  #define MSG_CONTROL_RETRACT_RECOVER         _UxGT("UnRet mm")
 #endif
 #ifndef MSG_CONTROL_RETRACT_RECOVER_SWAP
-  #define MSG_CONTROL_RETRACT_RECOVER_SWAP    _UxGT("S UnRet+mm")
+  #define MSG_CONTROL_RETRACT_RECOVER_SWAP    _UxGT("S UnRet mm")
 #endif
 #ifndef MSG_CONTROL_RETRACT_RECOVERF
   #define MSG_CONTROL_RETRACT_RECOVERF        _UxGT("UnRet  V")

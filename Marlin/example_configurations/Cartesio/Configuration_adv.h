@@ -308,13 +308,13 @@
       // Remember: you should set the second extruder x-offset to 0 in your slicer.
 
   // There are a few selectable movement modes for dual x-carriages using M605 S<mode>
-  //    Mode 0: Full control. The slicer has full control over both x-carriages and can achieve optimal travel results
-  //                           as long as it supports dual x-carriages. (M605 S0)
-  //    Mode 1: Auto-park mode. The firmware will automatically park and unpark the x-carriages on tool changes so
-  //                           that additional slicer support is not required. (M605 S1)
-  //    Mode 2: Duplication mode. The firmware will transparently make the second x-carriage and extruder copy all
-  //                           actions of the first x-carriage. This allows the printer to print 2 arbitrary items at
-  //                           once. (2nd extruder x offset and temp offset are set using: M605 S2 [Xnnn] [Rmmm])
+  //    Mode 0 (DXC_FULL_CONTROL_MODE): Full control. The slicer has full control over both x-carriages and can achieve optimal travel results
+  //                                    as long as it supports dual x-carriages. (M605 S0)
+  //    Mode 1 (DXC_AUTO_PARK_MODE)   : Auto-park mode. The firmware will automatically park and unpark the x-carriages on tool changes so
+  //                                    that additional slicer support is not required. (M605 S1)
+  //    Mode 2 (DXC_DUPLICATION_MODE) : Duplication mode. The firmware will transparently make the second x-carriage and extruder copy all
+  //                                    actions of the first x-carriage. This allows the printer to print 2 arbitrary items at
+  //                                    once. (2nd extruder x offset and temp offset are set using: M605 S2 [Xnnn] [Rmmm])
 
   // This is the default power-up mode which can be later using M605.
   #define DEFAULT_DUAL_X_CARRIAGE_MODE DXC_FULL_CONTROL_MODE
@@ -454,6 +454,8 @@
     #define PROGRESS_MSG_EXPIRE   0
     // Enable this to show messages for MSG_TIME then hide them
     //#define PROGRESS_MSG_ONCE
+    // Add a menu item to test the progress bar:
+    //#define LCD_PROGRESS_BAR_TEST
   #endif
 
   // This allows hosts to request long names for files and folders with M33
@@ -468,12 +470,12 @@
 
 /**
  * Additional options for Graphical Displays
- * 
+ *
  * Use the optimizations here to improve printing performance,
  * which can be adversely affected by graphical display drawing,
  * especially when doing several short moves, and when printing
  * on DELTA and SCARA machines.
- * 
+ *
  * Some of these options may result in the display lagging behind
  * controller events, as there is a trade-off between reliable
  * printing performance versus fast display updates.
@@ -545,14 +547,7 @@
  *
  * Assumption: advance = k * (delta velocity)
  * K=0 means advance disabled.
- * To get a rough start value for calibration, measure your "free filament length"
- * between the hobbed bolt and the nozzle (in cm). Use the formula below that fits
- * your setup, where L is the "free filament length":
- *
- * Filament diameter           |   1.75mm  |    3.0mm   |
- * ----------------------------|-----------|------------|
- * Stiff filament (PLA)        | K=47*L/10 | K=139*L/10 |
- * Softer filament (ABS, nGen) | K=88*L/10 | K=260*L/10 |
+ * See Marlin documentation for calibration instructions.
  */
 //#define LIN_ADVANCE
 
@@ -1084,5 +1079,14 @@
  * Include capabilities in M115 output
  */
 //#define EXTENDED_CAPABILITIES_REPORT
+
+/**
+ * Volumetric extrusion default state
+ * Activate to make volumetric extrusion the default method,
+ * with DEFAULT_NOMINAL_FILAMENT_DIA as the default diameter.
+ *
+ * M200 D0 to disable, M200 Dn to set a new diameter.
+ */ 
+//#define VOLUMETRIC_DEFAULT_ON
 
 #endif // CONFIGURATION_ADV_H
