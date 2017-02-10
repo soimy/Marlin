@@ -3044,23 +3044,7 @@ void lcd_update() {
       #endif
       !lcd_status_update_delay--
     ) {
-<<<<<<< HEAD
-      // lcd_status_update_delay = 9;
-      lcd_status_update_delay = (1000 - LCD_UPDATE_INTERVAL) / LCD_UPDATE_INTERVAL;
-      lcdDrawUpdate = LCDVIEW_REDRAW_NOW;
-    }
-
-    if (LCD_HANDLER_CONDITION) {
-
-      #if ENABLED(DOGLCD)
-        if (lcdDrawUpdate || drawing_screen)
-      #else
-        if (lcdDrawUpdate)
-      #endif
-      {
-=======
       lcd_status_update_delay = 9
->>>>>>> 7ca4f16a5c95f2acd17f89ca7370dae524a9a2c8
         #if ENABLED(DOGLCD)
           + 3
         #endif
