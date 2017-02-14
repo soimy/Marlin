@@ -388,7 +388,7 @@ int feedrate_percentage = 100, saved_feedrate_percentage,
     flow_percentage[EXTRUDERS] = ARRAY_BY_EXTRUDERS1(100);
 
 bool axis_relative_modes[] = AXIS_RELATIVE_MODES,
-     volumetric_enabled = 
+     volumetric_enabled =
       #if ENABLED(VOLUMETRIC_DEFAULT_ON)
         true
       #else
@@ -2001,8 +2001,13 @@ static void clean_up_after_endstop_or_probe_move() {
   #define STOW_PROBE() set_probe_deployed(false)
 
   #if ENABLED(BLTOUCH)
+    void bltouch_command(int angle) {
+      servo[Z_ENDSTOP_SERVO_NR].move(angle);  // Give the BL-Touch the command and wait
+      safe_delay(375);
+    }
+
     FORCE_INLINE void set_bltouch_deployed(const bool &deploy) {
-      servo[Z_ENDSTOP_SERVO_NR].move(deploy ? BLTOUCH_DEPLOY : BLTOUCH_STOW);
+      bltouch_command(deploy ? BLTOUCH_DEPLOY : BLTOUCH_STOW);
       #if ENABLED(DEBUG_LEVELING_FEATURE)
         if (DEBUGGING(LEVELING)) {
           SERIAL_ECHOPAIR("set_bltouch_deployed(", deploy);
@@ -2030,7 +2035,15 @@ static void clean_up_after_endstop_or_probe_move() {
 
     // When deploying make sure BLTOUCH is not already triggered
     #if ENABLED(BLTOUCH)
-      if (deploy && TEST_BLTOUCH()) { stop(); return true; }
+      if (deploy && TEST_BLTOUCH()) {      // If BL-Touch says it's triggered
+        bltouch_command(BLTOUCH_RESET);    // try to reset it.
+        set_bltouch_deployed(true);        // Also needs to deploy and stow to
+        set_bltouch_deployed(false);       // clear the triggered condition.
+        if (TEST_BLTOUCH()) {              // If it still claims to be triggered...
+          stop();                          // punt!
+          return true;
+        }
+      }
     #elif ENABLED(Z_PROBE_SLED)
       if (axis_unhomed_error(true, false, false)) { stop(); return true; }
     #elif ENABLED(Z_PROBE_ALLEN_KEY)
@@ -2222,7 +2235,7 @@ static void clean_up_after_endstop_or_probe_move() {
       SERIAL_PROTOCOLPGM(" Y: ");
       SERIAL_PROTOCOL_F(y, 3);
       SERIAL_PROTOCOLPGM(" Z: ");
-      SERIAL_PROTOCOL_F(measured_z, 3);
+      SERIAL_PROTOCOL_F(measured_z - -zprobe_zoffset + 0.0001, 3);
       SERIAL_EOL;
     }
 
@@ -2951,7 +2964,7 @@ bool position_is_reachable(float target[XYZ]
       return HYPOT2(dx - SCARA_OFFSET_X, dy - SCARA_OFFSET_Y) <= sq(L1 + L2);
     #endif
   #elif ENABLED(DELTA)
-    return HYPOT2(dx, dy) <= sq(DELTA_PRINTABLE_RADIUS);
+    return HYPOT2(dx, dy) <= sq((float)(DELTA_PRINTABLE_RADIUS));
   #else
     const float dz = RAW_Z_POSITION(target[Z_AXIS]);
     return dx >= X_MIN_POS - 0.0001 && dx <= X_MAX_POS + 0.0001
@@ -3916,7 +3929,7 @@ inline void gcode_G28() {
    *  R  Set the Right limit of the probing grid
    *
    * Parameters with BILINEAR only:
-   * 
+   *
    *  Z  Supply an additional Z probe offset
    *
    * Global Parameters:
@@ -4469,7 +4482,7 @@ inline void gcode_G28() {
     SERIAL_PROTOCOLPGM(" Y: ");
     SERIAL_PROTOCOL(Y_probe_location + 0.0001);
     SERIAL_PROTOCOLPGM(" Z: ");
-    SERIAL_PROTOCOLLN(measured_z + 0.0001);
+    SERIAL_PROTOCOLLN(measured_z - -zprobe_zoffset + 0.0001);
 
     clean_up_after_endstop_or_probe_move();
 
@@ -10451,6 +10464,12 @@ void setup() {
     for (uint8_t t = 0; t < MIXING_VIRTUAL_TOOLS; t++)
       for (uint8_t i = 0; i < MIXING_STEPPERS; i++)
         mixing_virtual_tool_mix[t][i] = mixing_factor[i];
+  #endif
+
+  #if ENABLED(BLTOUCH)
+    bltouch_command(BLTOUCH_RESET);    // Just in case the BLTouch is in the error state, try to
+    set_bltouch_deployed(true);        // reset it. Also needs to deploy and stow to clear the
+    set_bltouch_deployed(false);       // error condition.
   #endif
 
   #if ENABLED(EXPERIMENTAL_I2CBUS) && I2C_SLAVE_ADDRESS > 0
