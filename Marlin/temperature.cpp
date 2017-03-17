@@ -485,7 +485,7 @@ int Temperature::getHeaterPower(int heater) {
     }
   }
 
-  void Temperature::checkHeatbedAutoFans() {
+  void Temperature::checkHeatbedAutoFan() {
     if(!PIN_EXISTS(HEATBED_AUTO_FAN_PIN))
       return;
 
@@ -763,7 +763,7 @@ void Temperature::manage_heater() {
   #if HAS_AUTO_FAN
     if (ELAPSED(ms, next_auto_fan_check_ms)) { // only need to check fan state very infrequently
       checkExtruderAutoFans();
-      checkHeatbedAutoFans();
+      checkHeatbedAutoFan();
       next_auto_fan_check_ms = ms + 2500UL;
     }
   #endif
