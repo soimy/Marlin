@@ -501,9 +501,11 @@ int Temperature::getHeaterPower(int heater) {
         analogWrite(fanPin, HEATBED_AUTO_FAN_SPEED);
       }
     } else {
-      fanState = false;
-      digitalWrite(fanPin, 0);
-      analogWrite(fanPin, 0);
+      if(fanState) {
+        fanState = false;
+        digitalWrite(fanPin, 0);
+        analogWrite(fanPin, 0);
+      }
     }
     
   }
@@ -1099,6 +1101,9 @@ void Temperature::init() {
     #else
       SET_OUTPUT(E3_AUTO_FAN_PIN);
     #endif
+  #endif
+  #if HAS_HEATBED_AUTO_FAN
+    SET_OUTPUT(HEATBED_AUTO_FAN_PIN);
   #endif
 
   // Use timer0 for temperature measurement
