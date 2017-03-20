@@ -42,7 +42,10 @@ applet/
 *.i
 *.ii
 *.swp
-
+c_cpp_*
+.ycm_extra_conf.*
+.build
+.vscode
 
 #
 # C++

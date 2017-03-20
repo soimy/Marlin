@@ -486,10 +486,9 @@ int Temperature::getHeaterPower(int heater) {
   }
 
   void Temperature::checkHeatbedAutoFan() {
-    if(!PIN_EXISTS(HEATBED_AUTO_FAN_PIN))
-      return;
-
     const int8_t fanPin = HEATBED_AUTO_FAN_PIN;
+    if(fanPin <= 0) return; // Early exit with no heatbed fan defined
+
     static bool fanState = false;
     float delta_temperature_bed = current_temperature_bed - target_temperature_bed;
 
