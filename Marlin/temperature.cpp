@@ -490,10 +490,10 @@ int Temperature::getHeaterPower(int heater) {
     if(fanPin <= 0) return; // Early exit with no heatbed fan defined
 
     static bool fanState = false;
-    float delta_temperature_bed = current_temperature_bed - target_temperature_bed;
+    int delta_temperature_bed = (int)current_temperature_bed - target_temperature_bed;
 
     if (delta_temperature_bed > HEATBED_AUTO_FAN_DELTA_TEMPERATURE &&
-        current_temperature_bed > HEATBED_AUTO_FAN_MIN_TEMPERATURE ) {
+        (int)current_temperature_bed > HEATBED_AUTO_FAN_MIN_TEMPERATURE ) {
       if(!fanState){
         fanState = true;
         digitalWrite(fanPin, HEATBED_AUTO_FAN_SPEED);
