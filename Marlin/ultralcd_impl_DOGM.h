@@ -357,9 +357,10 @@ static void lcd_implementation_init() {
   #endif
 
   #if ENABLED(MKS_12864OLED) || ENABLED(MKS_12864OLED_SSD1306)
-    OUT_WRITE(LCD_PINS_RS, LOW);
-    _delay_ms(500);
-    OUT_WRITE(LCD_PINS_RS, HIGH);
+    #ifndef LCD_RESET
+      #define LCD_RESET
+      #define LCD_RESET_PIN LCD_PINS_RS
+    #endif
   #endif
 
   #if PIN_EXISTS(LCD_RESET)
@@ -369,7 +370,7 @@ static void lcd_implementation_init() {
     _delay_ms(5); // delay to allow the display to initalize
   #endif
 
-  #if PIN_EXISTS(LCD_RESET) || ENABLED(MKS_12864OLED) || ENABLED(MKS_12864OLED_SSD1306)
+  #if PIN_EXISTS(LCD_RESET)
     u8g.begin();
   #endif
 
