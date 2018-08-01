@@ -3080,9 +3080,16 @@ static void homeaxis(const AxisEnum axis) {
   #if ENABLED(DEBUG_LEVELING_FEATURE)
     if (DEBUGGING(LEVELING)) SERIAL_ECHOLNPGM("Home 1 Fast:");
   #endif
-  do_homing_move(axis, 1.5f * max_length(axis) * axis_home_dir);
+
   #if HOMING_Z_WITH_PROBE && ENABLED(BLTOUCH)
-    // BLTOUCH needs to be stowed after trigger to let rearm itself
+    // BLTOUCH needs to be deployed every time
+    if (axis == Z_AXIS && set_bltouch_deployed(true)) return;
+  #endif
+
+  do_homing_move(axis, 1.5f * max_length(axis) * axis_home_dir);
+
+  #if HOMING_Z_WITH_PROBE && ENABLED(BLTOUCH)
+    // BLTOUCH needs to be stowed after trigger to rearm itself
     if (axis == Z_AXIS) set_bltouch_deployed(false);
   #endif
 
@@ -3112,16 +3119,17 @@ static void homeaxis(const AxisEnum axis) {
     #endif
 
     #if HOMING_Z_WITH_PROBE && ENABLED(BLTOUCH)
-      // BLTOUCH needs to deploy everytime
+      // BLTOUCH needs to be deployed every time
       if (axis == Z_AXIS && set_bltouch_deployed(true)) return;
     #endif
-    do_homing_move(axis, 2 * bump, get_homing_bump_feedrate(axis));
-  }
 
-  // Put away the Z probe
-  #if HOMING_Z_WITH_PROBE
-    if (axis == Z_AXIS && STOW_PROBE()) return;
-  #endif
+    do_homing_move(axis, 2 * bump, get_homing_bump_feedrate(axis));
+
+    #if HOMING_Z_WITH_PROBE && ENABLED(BLTOUCH)
+      // BLTOUCH needs to be stowed after trigger to rearm itself
+      if (axis == Z_AXIS) set_bltouch_deployed(false);
+    #endif
+  }
 
   /**
    * Home axes that have dual endstops... differently
@@ -3196,6 +3204,11 @@ static void homeaxis(const AxisEnum axis) {
       if (DEBUGGING(LEVELING)) DEBUG_POS("> AFTER set_axis_is_at_home", current_position);
     #endif
 
+  #endif
+
+  // Put away the Z probe
+  #if HOMING_Z_WITH_PROBE
+    if (axis == Z_AXIS && STOW_PROBE()) return;
   #endif
 
   // Clear retracted status if homing the Z axis

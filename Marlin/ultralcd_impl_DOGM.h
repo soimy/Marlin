@@ -356,11 +356,8 @@ static void lcd_implementation_init() {
     OUT_WRITE(LCD_BACKLIGHT_PIN, HIGH);
   #endif
 
-  #if ENABLED(MKS_12864OLED) || ENABLED(MKS_12864OLED_SSD1306)
-    #ifndef LCD_RESET
-      #define LCD_RESET
-      #define LCD_RESET_PIN LCD_PINS_RS
-    #endif
+  #if !defined(LCD_RESET_PIN) && (ENABLED(MKS_12864OLED) || ENABLED(MKS_12864OLED_SSD1306))
+    #define LCD_RESET_PIN LCD_PINS_RS
   #endif
 
   #if PIN_EXISTS(LCD_RESET)
