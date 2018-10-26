@@ -121,12 +121,12 @@
 // Heaters / Fans
 //
 #define HEATER_0_PIN        9
-#define HEATER_1_PIN       10
-#define HEATER_2_PIN       11
+#define HEATER_1_PIN       -1 
+#define HEATER_2_PIN       -1 
 #define HEATER_BED_PIN      8
 
 #ifndef FAN_PIN
-  #define FAN_PIN          12
+  #define FAN_PIN          11
 #endif
 
 //

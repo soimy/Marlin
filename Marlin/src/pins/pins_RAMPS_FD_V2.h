@@ -39,13 +39,20 @@
 #undef INVERTED_BED_PINS
 #undef INVERTED_FAN_PINS
 
-#define I2C_EEPROM
-#define E2END 0xFFFF // 64K in a 24C512
+// #define I2C_EEPROM
+// #define E2END 0xFFFF // 64K in a 24C512
 
-#ifndef PS_ON_PIN
-  #define PS_ON_PIN        12
+#ifdef HEATER_1_PIN
+  #undef HEATER_1_PIN
+  #define HEATER_1_PIN -1
 #endif
 
-#ifndef FILWIDTH_PIN
-  #define FILWIDTH_PIN      5   // Analog Input on AUX2
+#ifdef HEATER_2_PIN
+  #undef HEATER_2_PIN
+  #define HEATER_2_PIN -1
+#endif
+
+#undef LED_PIN
+#ifndef CASE_LIGHT_PIN
+  #define CASE_LIGHT_PIN 12
 #endif
