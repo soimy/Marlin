@@ -54,5 +54,5 @@
 
 #undef LED_PIN
 #ifndef CASE_LIGHT_PIN
-  #define CASE_LIGHT_PIN 12
+  #define CASE_LIGHT_PIN SERVO1_PIN 
 #endif
