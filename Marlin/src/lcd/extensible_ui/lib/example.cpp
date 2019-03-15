@@ -27,13 +27,13 @@
 
 // To implement a new UI, complete the functions below and
 // read or update Marlin's state using the methods in the
-// UI methods in "../ui_api.h"
+// ExtUI methods in "../ui_api.h"
 //
 // Although it may be possible to access other state
 // variables from Marlin, using the API here possibly
 // helps ensure future compatibility.
 
-namespace UI {
+namespace ExtUI {
   void onStartup() {
     /* Initialize the display module here. The following
      * routines are available for access to the GPIO pins:
@@ -46,7 +46,7 @@ namespace UI {
      */
   }
   void onIdle() {}
-  void onPrinterKilled(const char* msg) {}
+  void onPrinterKilled(PGM_P const msg) {}
   void onMediaInserted() {};
   void onMediaError() {};
   void onMediaRemoved() {};
@@ -55,8 +55,8 @@ namespace UI {
   void onPrintTimerPaused() {}
   void onPrintTimerStopped() {}
   void onFilamentRunout() {}
-  void onStatusChanged(const char* msg) {}
-  void onStatusChanged(progmem_str msg) {}
+  void onUserConfirmRequired(const char * const msg) {}
+  void onStatusChanged(const char * const msg) {}
   void onFactoryReset() {}
   void onLoadSettings() {}
   void onStoreSettings() {}

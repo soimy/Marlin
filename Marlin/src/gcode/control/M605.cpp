@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -22,7 +22,7 @@
 
 #include "../../inc/MarlinConfig.h"
 
-#if ENABLED(DUAL_X_CARRIAGE) || ENABLED(DUAL_NOZZLE_DUPLICATION_MODE)
+#if HAS_DUPLICATION_MODE
 
 //#define DEBUG_DXC_MODE
 
@@ -38,8 +38,8 @@
    * M605: Set dual x-carriage movement mode
    *
    *    M605    : Restore user specified DEFAULT_DUAL_X_CARRIAGE_MODE
-   *    M605 S0: Full control mode. The slicer has full control over x-carriage movement
-   *    M605 S1: Auto-park mode. The inactive head will auto park/unpark without slicer involvement
+   *    M605 S0 : Full control mode. The slicer has full control over x-carriage movement
+   *    M605 S1 : Auto-park mode. The inactive head will auto park/unpark without slicer involvement
    *    M605 S2 [Xnnn] [Rmmm]: Duplication mode. The second extruder will duplicate the first with nnn
    *                         units x-offset and an optional differential hotend temperature of
    *                         mmm degrees. E.g., with "M605 S2 X100 R2" the second extruder will duplicate
@@ -59,12 +59,14 @@
       const DualXMode previous_mode = dual_x_carriage_mode;
 
       dual_x_carriage_mode = (DualXMode)parser.value_byte();
+
+      #if 0
       scaled_duplication_mode = false;
 
       if (dual_x_carriage_mode == DXC_SCALED_DUPLICATION_MODE) {
         if (previous_mode != DXC_DUPLICATION_MODE) {
-          SERIAL_ECHOPGM("Printer must be in DXC_DUPLICATION_MODE prior to \n");
-          SERIAL_ECHOPGM("specifying DXC_SCALED_DUPLICATION_MODE.\n");
+          SERIAL_ECHOLNPGM("Printer must be in DXC_DUPLICATION_MODE prior to ");
+          SERIAL_ECHOLNPGM("specifying DXC_SCALED_DUPLICATION_MODE.");
           dual_x_carriage_mode = DEFAULT_DUAL_X_CARRIAGE_MODE;
           return;
         }
@@ -77,6 +79,7 @@
         }
         return;
       }
+      #endif
 
       switch (dual_x_carriage_mode) {
         case DXC_FULL_CONTROL_MODE:
@@ -147,15 +150,36 @@
     #endif // DEBUG_DXC_MODE
   }
 
-#elif ENABLED(DUAL_NOZZLE_DUPLICATION_MODE)
+#elif ENABLED(MULTI_NOZZLE_DUPLICATION)
 
+  /**
+   * M605: Set multi-nozzle duplication mode
+   *
+   *  S2       - Enable duplication mode
+   *  P[mask]  - Bit-mask of nozzles to include in the duplication set.
+   *             A value of 0 disables duplication.
+   *  E[index] - Last nozzle index to include in the duplication set.
+   *             A value of 0 disables duplication.
+   */
   void GcodeSuite::M605() {
-    planner.synchronize();
-    extruder_duplication_enabled = parser.intval('S') == (int)DXC_DUPLICATION_MODE;
+    if (parser.seen("EPS")) {
+      planner.synchronize();
+      if (parser.seenval('P')) duplication_e_mask = parser.value_int();   // Set the mask directly
+      else if (parser.seenval('E')) duplication_e_mask = pow(2, e + 1) - 1;    // Set the mask by E index
+      const bool ena = (2 == parser.intval('S', extruder_duplication_enabled ? 2 : 0));
+      extruder_duplication_enabled = ena && (duplication_e_mask >= 3);
+    }
     SERIAL_ECHO_START();
-    SERIAL_ECHOLNPAIR(MSG_DUPLICATION_MODE, extruder_duplication_enabled ? MSG_ON : MSG_OFF);
+    SERIAL_ECHOPGM(MSG_DUPLICATION_MODE);
+    serialprint_onoff(extruder_duplication_enabled);
+    if (ena) {
+      SERIAL_ECHOPGM(" ( ");
+      HOTEND_LOOP() if (TEST(duplication_e_mask, e)) { SERIAL_ECHO(e); SERIAL_CHAR(' '); }
+      SERIAL_CHAR(')');
+    }
+    SERIAL_EOL();
   }
 
-#endif // DUAL_NOZZLE_DUPLICATION_MODE
+#endif // MULTI_NOZZLE_DUPLICATION
 
-#endif // DUAL_X_CARRIAGE || DUAL_NOZZLE_DUPLICATION_MODE
+#endif // HAS_DUPICATION_MODE

@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -40,7 +40,9 @@
  *   Z<zoffset>
  */
 void GcodeSuite::M218() {
-  if (get_target_extruder_from_command() || target_extruder == 0) return;
+
+  const int8_t target_extruder = get_target_extruder_from_command();
+  if (target_extruder < 0) return;
 
   if (parser.seenval('X')) hotend_offset[X_AXIS][target_extruder] = parser.value_linear_units();
   if (parser.seenval('Y')) hotend_offset[Y_AXIS][target_extruder] = parser.value_linear_units();

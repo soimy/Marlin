@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2017 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -70,7 +70,8 @@
   #error "USBCON should be defined by the platform for this board."
 #endif
 
-#define BOARD_NAME         "Printrboard Rev.F"
+#define BOARD_NAME "Printrboard Rev.F"
+
 // Disable JTAG pins so EXP1 pins work correctly
 // (Its pins are used for the Extrudrboard and filament sensor, for example).
 #define DISABLE_JTAG

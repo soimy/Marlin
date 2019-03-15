@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -40,7 +40,6 @@
 #define MSG_AUTO_HOME_X                     _UxGT("Zeruj X")
 #define MSG_AUTO_HOME_Y                     _UxGT("Zeruj Y")
 #define MSG_AUTO_HOME_Z                     _UxGT("Zeruj Z")
-#define MSG_TMC_Z_CALIBRATION               _UxGT("Kalibruj Z")
 #define MSG_LEVEL_BED                       _UxGT("Poziom. stołu")
 #define MSG_LEVEL_BED_HOMING                _UxGT("Pozycja zerowa")
 #define MSG_LEVEL_BED_WAITING               _UxGT("Kliknij by rozp.")
@@ -85,8 +84,8 @@
 #define MSG_MAX                             LCD_STR_THERMOMETER _UxGT(" Max")
 #define MSG_FACTOR                          LCD_STR_THERMOMETER _UxGT(" Mnożnik")
 #define MSG_AUTOTEMP                        _UxGT("Auto. temperatura")
-#define MSG_ON                              _UxGT("Wł. ")
-#define MSG_OFF                             _UxGT("Wył.")
+#define MSG_LCD_ON                          _UxGT("Wł.")
+#define MSG_LCD_OFF                         _UxGT("Wył.")
 #define MSG_PID_P                           _UxGT("PID-P")
 #define MSG_PID_I                           _UxGT("PID-I")
 #define MSG_PID_D                           _UxGT("PID-D")

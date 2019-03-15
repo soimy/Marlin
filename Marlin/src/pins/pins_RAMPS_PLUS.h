@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -41,9 +41,7 @@
  #error "Oops! Select 'Arduino/Genuino Mega or Mega 2560' in 'Tools > Board.'"
 #endif
 
-#ifndef BOARD_NAME
- #define BOARD_NAME "RAMPS 1.4 Plus"
-#endif
+#define BOARD_NAME "RAMPS 1.4 Plus"
 
 #define RAMPS_D8_PIN  10
 #define RAMPS_D10_PIN  8

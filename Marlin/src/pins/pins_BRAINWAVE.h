@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2017 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -71,7 +71,7 @@
   #error "Oops! Select 'AT90USB646_TEENSYPP' in 'Tools > Board.'"
 #endif
 
-#define BOARD_NAME         "Brainwave"
+#define BOARD_NAME "Brainwave"
 
 //
 // Limit Switches

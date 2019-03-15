@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -45,9 +45,7 @@
 
 #include "../../inc/MarlinConfig.h"
 
-typedef const __FlashStringHelper *progmem_str;
-
-namespace UI {
+namespace ExtUI {
 
   enum axis_t     : uint8_t { X, Y, Z };
   enum extruder_t : uint8_t { E0, E1, E2, E3, E4, E5 };
@@ -62,19 +60,20 @@ namespace UI {
   bool isAxisPositionKnown(const axis_t);
   bool canMove(const axis_t);
   bool canMove(const extruder_t);
-  void enqueueCommands(progmem_str);
+  void enqueueCommands_P(PGM_P const);
 
   /**
    * Getters and setters
    * Should be used by the EXTENSIBLE_UI to query or change Marlin's state.
    */
-  progmem_str getFirmwareName_str();
+  PGM_P getFirmwareName_str();
 
   float getActualTemp_celsius(const heater_t);
   float getActualTemp_celsius(const extruder_t);
   float getTargetTemp_celsius(const heater_t);
   float getTargetTemp_celsius(const extruder_t);
-  float getFan_percent(const fan_t);
+  float getTargetFan_percent(const fan_t);
+  float getActualFan_percent(const fan_t);
   float getAxisPosition_mm(const axis_t);
   float getAxisPosition_mm(const extruder_t);
   float getAxisSteps_per_mm(const axis_t);
@@ -91,6 +90,22 @@ namespace UI {
   float getFeedrate_percent();
   uint8_t getProgress_percent();
   uint32_t getProgress_seconds_elapsed();
+  
+  #if HAS_LEVELING
+    bool getLevelingActive();
+    void setLevelingActive(const bool);
+    #if HAS_MESH
+      typedef float (&bed_mesh_t)[GRID_MAX_POINTS_X][GRID_MAX_POINTS_Y];
+      bool getMeshValid();
+      bed_mesh_t getMeshArray();
+      void setMeshPoint(const uint8_t xpos, const uint8_t ypos, const float zval);
+      void onMeshUpdate(const uint8_t xpos, const uint8_t ypos, const float zval);
+    #endif
+  #endif
+
+  #if ENABLED(HOST_PROMPT_SUPPORT)
+    void setHostResponse(const uint8_t);
+  #endif
 
   #if ENABLED(PRINTCOUNTER)
     char* getTotalPrints_str(char buffer[21]);
@@ -102,7 +117,7 @@ namespace UI {
 
   void setTargetTemp_celsius(const float, const heater_t);
   void setTargetTemp_celsius(const float, const extruder_t);
-  void setFan_percent(const float, const fan_t);
+  void setTargetFan_percent(const float, const fan_t);
   void setAxisPosition_mm(const float, const axis_t);
   void setAxisPosition_mm(const float, const extruder_t);
   void setAxisSteps_per_mm(const float, const axis_t);
@@ -118,6 +133,7 @@ namespace UI {
   void setRetractAcceleration_mm_s2(const float);
   void setTravelAcceleration_mm_s2(const float);
   void setFeedrate_percent(const float);
+  void setUserConfirmed(void);
 
   #if ENABLED(LIN_ADVANCE)
     float getLinearAdvance_mm_mm_s(const extruder_t);
@@ -137,16 +153,22 @@ namespace UI {
   extruder_t getActiveTool();
   void setActiveTool(const extruder_t, bool no_move);
 
+  #if ENABLED(BABYSTEPPING)
+    int16_t mmToWholeSteps(const float mm, const axis_t axis);
 
-  #if HOTENDS > 1
-    float getNozzleOffset_mm(const axis_t, const extruder_t);
-    void setNozzleOffset_mm(const float, const axis_t, const extruder_t);
+    bool babystepAxis_steps(const int16_t steps, const axis_t axis);
+    void smartAdjustAxis_steps(const int16_t steps, const axis_t axis, bool linked_nozzles);
   #endif
 
-  #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
+  #if HAS_HOTEND_OFFSET
+    float getNozzleOffset_mm(const axis_t, const extruder_t);
+    void setNozzleOffset_mm(const float, const axis_t, const extruder_t);
+    void normalizeNozzleOffset(const axis_t axis);
+  #endif
+
+  #if HAS_BED_PROBE
     float getZOffset_mm();
     void setZOffset_mm(const float);
-    void addZOffset_steps(const int16_t);
   #endif
 
   #if ENABLED(BACKLASH_GCODE)
@@ -162,7 +184,7 @@ namespace UI {
     #endif
   #endif
 
-  #if ENABLED(FILAMENT_RUNOUT_SENSOR)
+  #if HAS_FILAMENT_SENSOR
     bool getFilamentRunoutEnabled();
     void setFilamentRunoutEnabled(const bool);
 
@@ -178,7 +200,12 @@ namespace UI {
    * safe_millis must be called at least every 1 sec to guarantee time
    * yield should be called within lengthy loops
    */
-  uint32_t safe_millis();
+  #ifdef __SAM3X8E__
+    uint32_t safe_millis();
+  #else
+    FORCE_INLINE uint32_t safe_millis() { return millis(); } // TODO: Implement for AVR
+  #endif
+
   void delay_us(unsigned long us);
   void delay_ms(unsigned long ms);
   void yield();
@@ -205,14 +232,14 @@ namespace UI {
     public:
       FileList();
       void refresh();
-      bool seek(uint16_t, bool skip_range_check = false);
+      bool seek(const uint16_t, const bool skip_range_check = false);
 
       const char *longFilename();
       const char *shortFilename();
       const char *filename();
       bool isDir();
 
-      void changeDir(const char *dirname);
+      void changeDir(const char * const dirname);
       void upDir();
       bool isAtRootDir();
       uint16_t    count();
@@ -229,13 +256,13 @@ namespace UI {
   void onMediaError();
   void onMediaRemoved();
   void onPlayTone(const uint16_t frequency, const uint16_t duration);
-  void onPrinterKilled(const char* msg);
+  void onPrinterKilled(PGM_P const msg);
   void onPrintTimerStarted();
   void onPrintTimerPaused();
   void onPrintTimerStopped();
-  void onFilamentRunout();
-  void onStatusChanged(const char* msg);
-  void onStatusChanged(progmem_str msg);
+  void onFilamentRunout(const extruder_t extruder);
+  void onUserConfirmRequired(const char * const msg);
+  void onStatusChanged(const char * const msg);
   void onFactoryReset();
   void onStoreSettings();
   void onLoadSettings();
@@ -257,8 +284,8 @@ namespace UI {
  *   UI_INCREMENT(TargetTemp_celsius, E0)
  *
  */
-#define UI_INCREMENT_BY(method, inc, ...) UI::set ## method(UI::get ## method (__VA_ARGS__) + inc, ##__VA_ARGS__)
-#define UI_DECREMENT_BY(method, inc, ...) UI::set ## method(UI::get ## method (__VA_ARGS__) - inc, ##__VA_ARGS__)
+#define UI_INCREMENT_BY(method, inc, ...) ExtUI::set ## method(ExtUI::get ## method (__VA_ARGS__) + inc, ##__VA_ARGS__)
+#define UI_DECREMENT_BY(method, inc, ...) ExtUI::set ## method(ExtUI::get ## method (__VA_ARGS__) - inc, ##__VA_ARGS__)
 
 #define UI_INCREMENT(method, ...) UI_INCREMENT_BY(method, increment, ##__VA_ARGS__)
 #define UI_DECREMENT(method, ...) UI_DECREMENT_BY(method, increment, ##__VA_ARGS__)
