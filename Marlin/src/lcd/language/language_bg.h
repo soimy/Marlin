@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 /**
  * Bulgarian
@@ -27,9 +28,6 @@
  * See also http://marlinfw.org/docs/development/lcd_language.html
  *
  */
-#ifndef LANGUAGE_BG_H
-#define LANGUAGE_BG_H
-
 #define DISPLAY_CHARSET_ISO10646_5
 #define CHARSIZE 2
 
@@ -40,7 +38,6 @@
 #define MSG_AUTOSTART                       _UxGT("Автостарт")
 #define MSG_DISABLE_STEPPERS                _UxGT("Изкл. двигатели")
 #define MSG_AUTO_HOME                       _UxGT("Паркиране")
-#define MSG_TMC_Z_CALIBRATION               _UxGT("Калибровка Z")
 #define MSG_SET_HOME_OFFSETS                _UxGT("Задай Начало")
 #define MSG_SET_ORIGIN                      _UxGT("Изходна точка")
 #define MSG_PREHEAT_1                       _UxGT("Подгряване " PREHEAT_1_LABEL)
@@ -79,8 +76,8 @@
 #define MSG_MAX                             LCD_STR_THERMOMETER _UxGT(" Максимум")
 #define MSG_FACTOR                          LCD_STR_THERMOMETER _UxGT(" Фактор")
 #define MSG_AUTOTEMP                        _UxGT("Авто-темп.")
-#define MSG_ON                              _UxGT("Вкл. ")
-#define MSG_OFF                             _UxGT("Изкл. ")
+#define MSG_LCD_ON                          _UxGT("Вкл.")
+#define MSG_LCD_OFF                         _UxGT("Изкл.")
 #define MSG_A_RETRACT                       _UxGT("A-откат")
 #define MSG_A_TRAVEL                        _UxGT("A-travel")
 #define MSG_STEPS_PER_MM                    _UxGT("Стъпки/mm")
@@ -134,7 +131,7 @@
 #define MSG_AUTORETRACT                     _UxGT("Автоoткат")
 #define MSG_FILAMENTCHANGE                  _UxGT("Смяна нишка")
 #define MSG_INIT_SDCARD                     _UxGT("Иниц. SD-Карта")
-#define MSG_CNG_SDCARD                      _UxGT("Смяна SD-Карта")
+#define MSG_CHANGE_SDCARD                   _UxGT("Смяна SD-Карта")
 #define MSG_ZPROBE_OUT                      _UxGT("Z-сондата е извадена")
 #define MSG_ZPROBE_ZOFFSET                  _UxGT("Z Отстояние")
 #define MSG_BABYSTEP_X                      _UxGT("Министъпка X")
@@ -146,5 +143,3 @@
 #define MSG_DELTA_CALIBRATE_Y               _UxGT("Калибровка Y")
 #define MSG_DELTA_CALIBRATE_Z               _UxGT("Калибровка Z")
 #define MSG_DELTA_CALIBRATE_CENTER          _UxGT("Калибровка Център")
-
-#endif // LANGUAGE_BG_H

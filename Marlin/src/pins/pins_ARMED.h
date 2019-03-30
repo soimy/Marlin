@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -21,7 +21,7 @@
  */
 
 #ifndef STM32F4
-  #error "Oops!  Make sure you have an STM32F4 board selected from the 'Tools -> Boards' menu."
+  #error "Oops! Select an STM32F4 board in 'Tools > Board.'"
 #endif
 
 #ifndef ARMED_V1_0
@@ -29,10 +29,13 @@
 #endif
 
 #define DEFAULT_MACHINE_NAME "Arm'ed"
+
+#undef BOARD_NAME
 #define BOARD_NAME "Arm'ed"
 
 #define I2C_EEPROM
 
+#undef E2END
 #define E2END 0xFFF // EEPROM end address (4kB)
 
 #if HOTENDS > 2 || E_STEPPERS > 2
@@ -105,13 +108,6 @@
 #endif
 
 //
-// SPI
-//
-#define SCK_PIN            PA5
-#define MISO_PIN           PA6
-#define MOSI_PIN           PA7
-
-//
 // Temperature Sensors
 //
 #define TEMP_0_PIN         PC0   // Analog Input
@@ -133,7 +129,6 @@
 // Misc functions
 //
 #define SDSS               PE7
-#define SS_PIN             PE7
 #define LED_PIN            PB7   // Heart beat
 #define PS_ON_PIN          PA10
 #define KILL_PIN           PA8

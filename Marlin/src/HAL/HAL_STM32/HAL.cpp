@@ -1,7 +1,7 @@
 /**
  * Marlin 3D Printer Firmware
  *
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  * Copyright (c) 2016 Bob Cousins bobcousins42@googlemail.com
  * Copyright (c) 2015-2016 Nico Tonnhofer wurstnase.reprap@gmail.com
  * Copyright (c) 2017 Victor Perez
@@ -21,7 +21,8 @@
  *
  */
 
-#ifdef ARDUINO_ARCH_STM32
+#if defined(ARDUINO_ARCH_STM32) && !defined(STM32GENERIC)
+
 
 // --------------------------------------------------------------------------
 // Includes
@@ -30,6 +31,7 @@
 #include "HAL.h"
 
 #include "../../inc/MarlinConfig.h"
+#include "../shared/Delay.h"
 
 #if ENABLED(EEPROM_EMULATED_WITH_SRAM)
   #if STM32F7xx
@@ -77,11 +79,28 @@ uint16_t HAL_adc_result;
 // Public functions
 // --------------------------------------------------------------------------
 
+
+// Needed for DELAY_NS() / DELAY_US() on CORTEX-M7
+#if (defined(__arm__) || defined(__thumb__)) && __CORTEX_M == 7
+  // HAL pre-initialization task
+  // Force the preinit function to run between the premain() and main() function
+  // of the STM32 arduino core
+  __attribute__((constructor (102)))
+  void HAL_preinit() {
+    enableCycleCounter();
+  }
+#endif
+
 // HAL initialization task
 void HAL_init(void) {
+  FastIO_init();
 
   #if ENABLED(SDSUPPORT)
     OUT_WRITE(SDSS, HIGH); // Try to set SDSS inactive before any other SPI users start up
+  #endif
+
+  #if PIN_EXISTS(LED)
+    OUT_WRITE(LED_PIN, LOW);
   #endif
 
   #if ENABLED(EEPROM_EMULATED_WITH_SRAM)

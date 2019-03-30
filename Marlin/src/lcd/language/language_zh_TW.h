@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 /**
  * Traditional Chinese
@@ -27,10 +28,6 @@
  * See also http://marlinfw.org/docs/development/lcd_language.html
  *
  */
-#ifndef LANGUAGE_ZH_TW_H
-#define LANGUAGE_ZH_TW_H
-
-//#define TALL_FONT_CORRECTION (1)
 
 #define CHARSIZE 3
 
@@ -48,7 +45,6 @@
 #define MSG_AUTO_HOME_X                     _UxGT("回X原點")  //"Home X"
 #define MSG_AUTO_HOME_Y                     _UxGT("回Y原點")  //"Home Y"
 #define MSG_AUTO_HOME_Z                     _UxGT("回Z原點")  //"Home Z"
-#define MSG_TMC_Z_CALIBRATION               _UxGT("⊿校準Z")
 #define MSG_LEVEL_BED_HOMING                _UxGT("平台調平XYZ歸原點")  //"Homing XYZ"
 #define MSG_LEVEL_BED_WAITING               _UxGT("單擊開始熱床調平")  //"Click to Begin"
 #define MSG_LEVEL_BED_NEXT_POINT            _UxGT("下個熱床調平點")  //"Next Point"
@@ -122,7 +118,7 @@
 #define MSG_UBL_OUTPUT_MAP_CSV              _UxGT("輸出到CSV") // "Output for CSV"
 #define MSG_UBL_OUTPUT_MAP_BACKUP           _UxGT("輸出到備份") // "Off Printer Backup"
 #define MSG_UBL_INFO_UBL                    _UxGT("輸出UBL信息") // "Output UBL Info"
-#define MSG_UBL_EDIT_MESH_MENU              _UxGT("編輯網格") // "Edit Mesh"
+#define MSG_EDIT_MESH                       _UxGT("編輯網格") // "Edit Mesh"
 #define MSG_UBL_FILLIN_AMOUNT               _UxGT("填充合計") // "Fill-in Amount"
 #define MSG_UBL_MANUAL_FILLIN               _UxGT("手工填充") // "Manual Fill-in"
 #define MSG_UBL_SMART_FILLIN                _UxGT("聰明填充") // "Smart Fill-in"
@@ -183,8 +179,8 @@
 #define MSG_MAX                             _UxGT(" ") LCD_STR_THERMOMETER _UxGT(" 最大")  //" " LCD_STR_THERMOMETER " Max"
 #define MSG_FACTOR                          _UxGT(" ") LCD_STR_THERMOMETER _UxGT(" 系數")  //" " LCD_STR_THERMOMETER " Fact"
 #define MSG_AUTOTEMP                        _UxGT("自動控溫")  //"Autotemp"
-#define MSG_ON                              _UxGT("開 ")  //"On "
-#define MSG_OFF                             _UxGT("關 ")  //"Off"
+#define MSG_LCD_ON                          _UxGT("開")  //"On"
+#define MSG_LCD_OFF                         _UxGT("關")  //"Off"
 #define MSG_PID_P                           _UxGT("PID-P")  //"PID-P"
 #define MSG_PID_I                           _UxGT("PID-I")  //"PID-I"
 #define MSG_PID_D                           _UxGT("PID-D")  //"PID-D"
@@ -229,7 +225,7 @@
 #define MSG_E6STEPS                         _UxGT("擠出機6步數/mm") //"E6steps/mm"
 #define MSG_TEMPERATURE                     _UxGT("溫度")  //"Temperature"
 #define MSG_MOTION                          _UxGT("運作")  //"Motion"
-#define MSG_FILAMENT                        _UxGT("絲料測容")  //"Filament" lcd_control_volumetric_menu
+#define MSG_FILAMENT                        _UxGT("絲料測容")  //"Filament" menu_control_volumetric
 #define MSG_VOLUMETRIC_ENABLED              _UxGT("測容積mm³")  //"E in mm3" volumetric_enabled
 #define MSG_FILAMENT_DIAM                   _UxGT("絲料直徑")  //"Fil. Dia."
 #define MSG_FILAMENT_UNLOAD                 _UxGT("卸載 mm") // "Unload mm"
@@ -260,8 +256,8 @@
 #define MSG_CONTROL_RETRACT_SWAP            _UxGT("換手回抽長度mm")  //"Swap Re.mm" swap_retract_length, swap retract length (positive mm), for extruder change
 #define MSG_CONTROL_RETRACTF                _UxGT("回縮速率mm/s")  //"Retract  V" retract_feedrate_mm_s, feedrate for retracting (mm/s)
 #define MSG_CONTROL_RETRACT_ZHOP            _UxGT("Hop mm")  //"Hop mm" retract_zraise, retract Z-lift
-#define MSG_CONTROL_RETRACT_RECOVER         _UxGT("回縮恢復長度mm")  //"UnRet +mm" retract_recover_length, additional recover length (mm, added to retract length when recovering)
-#define MSG_CONTROL_RETRACT_RECOVER_SWAP    _UxGT("換手回縮恢復長度mm")  //"S UnRet+mm" swap_retract_recover_length, additional swap recover length (mm, added to retract length when recovering from extruder change)
+#define MSG_CONTROL_RETRACT_RECOVER         _UxGT("回縮恢復長度mm")  //"UnRet +mm" retract_recover_extra, additional recover length (mm, added to retract length when recovering)
+#define MSG_CONTROL_RETRACT_RECOVER_SWAP    _UxGT("換手回縮恢復長度mm")  //"S UnRet+mm" swap_retract_recover_extra, additional swap recover length (mm, added to retract length when recovering from extruder change)
 #define MSG_CONTROL_RETRACT_RECOVERF        _UxGT("回縮恢復後進料速率mm/s")  //"UnRet V" retract_recover_feedrate_mm_s, feedrate for recovering from retraction (mm/s)
 #define MSG_CONTROL_RETRACT_RECOVER_SWAPF   _UxGT("S UnRet V") // "S UnRet V"
 #define MSG_AUTORETRACT                     _UxGT("自動回縮")  //"AutoRetr." autoretract_enabled,
@@ -270,7 +266,7 @@
 #define MSG_FILAMENTUNLOAD                  _UxGT("卸載絲料") // "Unload filament"
 #define MSG_FILAMENTUNLOAD_ALL              _UxGT("卸載全部") // "Unload All"
 #define MSG_INIT_SDCARD                     _UxGT("初始化記憶卡")  //"Init. SD card"
-#define MSG_CNG_SDCARD                      _UxGT("更換記憶卡")  //"Change SD card"
+#define MSG_CHANGE_SDCARD                   _UxGT("更換記憶卡")  //"Change SD card"
 #define MSG_ZPROBE_OUT                      _UxGT("Z探針在熱床之外")  //"Z probe out. bed" Z probe is not within the physical limits
 #define MSG_SKEW_FACTOR                     _UxGT("偏斜因數") // "Skew Factor"
 #define MSG_BLTOUCH                         _UxGT("BLTouch")     // "BLTouch"
@@ -327,7 +323,7 @@
 #define MSG_CASE_LIGHT                      _UxGT("外殼燈") // "Case light"
 #define MSG_CASE_LIGHT_BRIGHTNESS           _UxGT("燈亮度") // "Light BRIGHTNESS"
 
-#if LCD_WIDTH > 19
+#if LCD_WIDTH >= 20
   #define MSG_INFO_PRINT_COUNT              _UxGT("列印計數")  //"Print Count"
   #define MSG_INFO_COMPLETED_PRINTS         _UxGT("已完成")  //"Completed"
   #define MSG_INFO_PRINT_TIME               _UxGT("總列印時間")  //"Total print time"
@@ -386,5 +382,3 @@
   #define MSG_FILAMENT_CHANGE_PURGE_1       _UxGT("清除中 ...") // "Purging..."
   #define MSG_FILAMENT_CHANGE_RESUME_1      _UxGT("恢復中 ...")  //"Resuming..."
 #endif // LCD_HEIGHT < 4
-
-#endif // LANGUAGE_ZH_TW_H

@@ -1,7 +1,7 @@
 /**
  * Marlin 3D Printer Firmware
  *
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  * Copyright (c) 2016 Bob Cousins bobcousins42@googlemail.com
  * Copyright (c) 2015-2016 Nico Tonnhofer wurstnase.reprap@gmail.com
  *
@@ -19,15 +19,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 /**
  * Description: HAL for Arduino Due and compatible (SAM3X8E)
  *
  * For ARDUINO_ARCH_SAM
  */
-
-#ifndef _HAL_DUE_H
-#define _HAL_DUE_H
 
 #define CPU_32_BIT
 
@@ -114,10 +112,8 @@ uint8_t HAL_get_reset_source(void); // get reset reason
 
 // Write single byte to specified SPI channel
 void spiSend(uint32_t chan, byte b);
-
 // Write buffer to specified SPI channel
 void spiSend(uint32_t chan, const uint8_t* buf, size_t n);
-
 // Read single byte from specified SPI channel
 uint8_t spiRec(uint32_t chan);
 
@@ -189,5 +185,3 @@ char *dtostrf (double __val, signed char __width, unsigned char __prec, char *__
 #ifdef __cplusplus
   }
 #endif
-
-#endif // _HAL_DUE_H

@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -43,7 +43,7 @@
   #include "MarlinSerial.h"
   #include "../../Marlin.h"
 
-  template<typename Cfg> typename MarlinSerial<Cfg>::ring_buffer_r MarlinSerial<Cfg>::rx_buffer = { 0 };
+  template<typename Cfg> typename MarlinSerial<Cfg>::ring_buffer_r MarlinSerial<Cfg>::rx_buffer = { 0, 0, { 0 } };
   template<typename Cfg> typename MarlinSerial<Cfg>::ring_buffer_t MarlinSerial<Cfg>::tx_buffer = { 0 };
   template<typename Cfg> bool     MarlinSerial<Cfg>::_written = false;
   template<typename Cfg> uint8_t  MarlinSerial<Cfg>::xon_xoff_state = MarlinSerial<Cfg>::XON_XOFF_CHAR_SENT | MarlinSerial<Cfg>::XON_CHAR;
@@ -739,6 +739,24 @@
 
 #endif // !USBCON && (UBRRH || UBRR0H || UBRR1H || UBRR2H || UBRR3H)
 
+
+#if defined(INTERNAL_SERIAL_PORT)
+
+    ISR(SERIAL_REGNAME(USART,INTERNAL_SERIAL_PORT,_RX_vect)) {
+      MarlinSerial<MarlinInternalSerialCfg<INTERNAL_SERIAL_PORT>>::store_rxd_char();
+    }
+
+    ISR(SERIAL_REGNAME(USART,INTERNAL_SERIAL_PORT,_UDRE_vect)) {
+      MarlinSerial<MarlinInternalSerialCfg<INTERNAL_SERIAL_PORT>>::_tx_udr_empty_irq();
+    }
+
+    // Preinstantiate
+    template class MarlinSerial<MarlinInternalSerialCfg<INTERNAL_SERIAL_PORT>>;
+
+    // Instantiate
+    MarlinSerial<MarlinInternalSerialCfg<INTERNAL_SERIAL_PORT>> internalSerial;
+
+#endif
 // For AT90USB targets use the UART for BT interfacing
 #if defined(USBCON) && ENABLED(BLUETOOTH)
   HardwareSerial bluetoothSerial;

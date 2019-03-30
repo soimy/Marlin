@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 /**
  * Russian
@@ -27,8 +28,6 @@
  * See also http://marlinfw.org/docs/development/lcd_language.html
  *
  */
-#ifndef LANGUAGE_RU_H
-#define LANGUAGE_RU_H
 
 #define DISPLAY_CHARSET_ISO10646_5
 #define CHARSIZE 2
@@ -48,7 +47,6 @@
 #define MSG_AUTO_HOME_X                     _UxGT("Парковка X")
 #define MSG_AUTO_HOME_Y                     _UxGT("Парковка Y")
 #define MSG_AUTO_HOME_Z                     _UxGT("Парковка Z")
-#define MSG_TMC_Z_CALIBRATION               _UxGT("Калибровать Z")
 #define MSG_LEVEL_BED_HOMING                _UxGT("Нулевое положение")
 #define MSG_LEVEL_BED_WAITING               _UxGT("Нажмите чтобы начать")
 #define MSG_LEVEL_BED_NEXT_POINT            _UxGT("Следующая точка")
@@ -124,7 +122,7 @@
 #define MSG_UBL_OUTPUT_MAP_CSV              _UxGT("Вывести в CSV")
 #define MSG_UBL_OUTPUT_MAP_BACKUP           _UxGT("Забекапить сетку")
 #define MSG_UBL_INFO_UBL                    _UxGT("Вывод информации UBL")
-#define MSG_UBL_EDIT_MESH_MENU              _UxGT("Редактировать сетку")
+#define MSG_EDIT_MESH                       _UxGT("Редактировать сетку")
 #define MSG_UBL_FILLIN_AMOUNT               _UxGT("Кол-во заполнителя")
 #define MSG_UBL_MANUAL_FILLIN               _UxGT("Ручное заполнение")
 #define MSG_UBL_SMART_FILLIN                _UxGT("Умное заполнение")
@@ -185,8 +183,8 @@
 #define MSG_MAX                             _UxGT(" ") LCD_STR_THERMOMETER _UxGT(" Макс")
 #define MSG_FACTOR                          _UxGT(" ") LCD_STR_THERMOMETER _UxGT(" Фактор")
 #define MSG_AUTOTEMP                        _UxGT("Автотемпература")
-#define MSG_ON                              _UxGT("Вкл.")
-#define MSG_OFF                             _UxGT("Выкл.")
+#define MSG_LCD_ON                          _UxGT("Вкл.")
+#define MSG_LCD_OFF                         _UxGT("Выкл.")
 #define MSG_PID_P                           _UxGT("PID-P")
 #define MSG_PID_I                           _UxGT("PID-I")
 #define MSG_PID_D                           _UxGT("PID-D")
@@ -272,7 +270,7 @@
 #define MSG_FILAMENTUNLOAD                  _UxGT("Выгрузка филамента")
 #define MSG_FILAMENTUNLOAD_ALL              _UxGT("Выгрузить всё")
 #define MSG_INIT_SDCARD                     _UxGT("Иниц. SD карту")
-#define MSG_CNG_SDCARD                      _UxGT("Сменить SD карту")
+#define MSG_CHANGE_SDCARD                   _UxGT("Сменить SD карту")
 #define MSG_ZPROBE_OUT                      _UxGT("Z датчик вне стола")
 #define MSG_SKEW_FACTOR                     _UxGT("Фактор наклона")
 #define MSG_BLTOUCH                         _UxGT("BLTouch")
@@ -399,5 +397,3 @@
   #define MSG_FILAMENT_CHANGE_PURGE_1       _UxGT("Выдавливание...")
   #define MSG_FILAMENT_CHANGE_RESUME_1      _UxGT("Возобновление...")
 #endif // LCD_HEIGHT < 4
-
-#endif // LANGUAGE_RU_H

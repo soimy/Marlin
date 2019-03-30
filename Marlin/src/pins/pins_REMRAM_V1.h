@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -21,7 +21,7 @@
  */
 
 #ifndef STM32F7xx
-  #error "Oops!  Make sure you have an STM32F7 board selected from the 'Tools -> Boards' menu."
+  #error "Oops! Select an STM32F7 board in 'Tools > Board.'"
 #endif
 
 #define DEFAULT_MACHINE_NAME "RemRam"
@@ -83,9 +83,9 @@
 //
 // Temperature Sensors
 //
-#define TEMP_0_PIN         65   // THERM_2
-#define TEMP_1_PIN         66   // THERM_3
-#define TEMP_BED_PIN       64   // THERM_1
+#define TEMP_0_PIN         64   // THERM_1
+#define TEMP_1_PIN         65   // THERM_2
+#define TEMP_BED_PIN       66   // THERM_3
 
 //
 // Heaters / Fans

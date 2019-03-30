@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -27,7 +27,7 @@
 
 #include "../../inc/MarlinConfig.h"
 
-#if ENABLED(ULTIPANEL)
+#if HAS_LCD_MENU
   #include "../../lcd/ultralcd.h"
 #endif
 
@@ -42,13 +42,7 @@
   #endif
 
   // Could be moved to a feature, but this is all the data
-  bool powersupply_on = (
-    #if ENABLED(PS_DEFAULT_OFF)
-      false
-    #else
-      true
-    #endif
-  );
+  bool powersupply_on;
 
   #if HAS_TRINAMIC
     #include "../../feature/tmc_util.h"
@@ -82,8 +76,8 @@
       restore_stepper_drivers();
     #endif
 
-    #if ENABLED(ULTIPANEL)
-      lcd_reset_status();
+    #if HAS_LCD_MENU
+      ui.reset_status();
     #endif
   }
 
@@ -100,10 +94,10 @@ void GcodeSuite::M81() {
   planner.finish_and_disable();
 
   #if FAN_COUNT > 0
-    zero_fan_speeds();
+    thermalManager.zero_fan_speeds();
     #if ENABLED(PROBING_FANS_OFF)
-      fans_paused = false;
-      ZERO(paused_fan_speed);
+      thermalManager.fans_paused = false;
+      ZERO(thermalManager.paused_fan_speed);
     #endif
   #endif
 
@@ -115,7 +109,7 @@ void GcodeSuite::M81() {
     PSU_OFF();
   #endif
 
-  #if ENABLED(ULTIPANEL)
+  #if HAS_LCD_MENU
     LCD_MESSAGEPGM(MACHINE_NAME " " MSG_OFF ".");
   #endif
 }

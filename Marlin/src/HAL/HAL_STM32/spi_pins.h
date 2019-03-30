@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,14 +22,14 @@
  * Define SPI Pins: SCK, MISO, MOSI, SS
  */
 #ifndef SCK_PIN
-  #define SCK_PIN   13
+  #define SCK_PIN   PIN_SPI_SCK
 #endif
 #ifndef MISO_PIN
-  #define MISO_PIN  12
+  #define MISO_PIN  PIN_SPI_MISO
 #endif
 #ifndef MOSI_PIN
-  #define MOSI_PIN  11
+  #define MOSI_PIN  PIN_SPI_MOSI
 #endif
 #ifndef SS_PIN
-  #define SS_PIN    14
+  #define SS_PIN    PIN_SPI_SS
 #endif

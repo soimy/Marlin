@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -87,7 +87,7 @@ void eeprom_write_byte(uint8_t *pos, unsigned char value) {
 
   eeprom_init();
 
-  Wire.beginTransmission(eeprom_device_address);
+  Wire.beginTransmission(I2C_ADDRESS(eeprom_device_address));
   Wire.write((int)(eeprom_address >> 8));   // MSB
   Wire.write((int)(eeprom_address & 0xFF)); // LSB
   Wire.write(value);
@@ -103,7 +103,7 @@ void eeprom_write_byte(uint8_t *pos, unsigned char value) {
 void eeprom_update_block(const void *pos, void* eeprom_address, size_t n) {
   eeprom_init();
 
-  Wire.beginTransmission(eeprom_device_address);
+  Wire.beginTransmission(I2C_ADDRESS(eeprom_device_address));
   Wire.write((int)((unsigned)eeprom_address >> 8));   // MSB
   Wire.write((int)((unsigned)eeprom_address & 0xFF)); // LSB
   Wire.endTransmission();
@@ -115,7 +115,7 @@ void eeprom_update_block(const void *pos, void* eeprom_address, size_t n) {
     flag |= Wire.read() ^ ptr[c];
 
   if (flag) {
-    Wire.beginTransmission(eeprom_device_address);
+    Wire.beginTransmission(I2C_ADDRESS(eeprom_device_address));
     Wire.write((int)((unsigned)eeprom_address >> 8));   // MSB
     Wire.write((int)((unsigned)eeprom_address & 0xFF)); // LSB
     Wire.write((uint8_t*)pos, n);
@@ -129,12 +129,11 @@ void eeprom_update_block(const void *pos, void* eeprom_address, size_t n) {
 
 
 uint8_t eeprom_read_byte(uint8_t *pos) {
-  byte data = 0xFF;
   unsigned eeprom_address = (unsigned)pos;
 
   eeprom_init();
 
-  Wire.beginTransmission(eeprom_device_address);
+  Wire.beginTransmission(I2C_ADDRESS(eeprom_device_address));
   Wire.write((int)(eeprom_address >> 8));   // MSB
   Wire.write((int)(eeprom_address & 0xFF)); // LSB
   Wire.endTransmission();
@@ -146,7 +145,7 @@ uint8_t eeprom_read_byte(uint8_t *pos) {
 void eeprom_read_block(void* pos, const void* eeprom_address, size_t n) {
   eeprom_init();
 
-  Wire.beginTransmission(eeprom_device_address);
+  Wire.beginTransmission(I2C_ADDRESS(eeprom_device_address));
   Wire.write((int)((unsigned)eeprom_address >> 8));   // MSB
   Wire.write((int)((unsigned)eeprom_address & 0xFF)); // LSB
   Wire.endTransmission();
@@ -155,5 +154,4 @@ void eeprom_read_block(void* pos, const void* eeprom_address, size_t n) {
     if (Wire.available()) *((uint8_t*)pos + c) = Wire.read();
 }
 
-
-#endif // ENABLED(I2C_EEPROM)
+#endif // I2C_EEPROM
