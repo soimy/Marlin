@@ -41,7 +41,10 @@
 
 #include "ultralcd_DOGM.h"
 #include "u8g_fontutf8.h"
-#include "dogm_Bootscreen.h"
+
+#if ENABLED(SHOW_BOOTSCREEN)
+  #include "dogm_Bootscreen.h"
+#endif
 
 #include "../lcdprint.h"
 #include "../fontutils.h"
@@ -138,6 +141,9 @@ void MarlinUI::set_font(const MarlinFont font_nr) {
       #else
         draw_custom_bootscreen(custom_start_bmp);
       #endif
+      #ifndef CUSTOM_BOOTSCREEN_TIMEOUT
+        #define CUSTOM_BOOTSCREEN_TIMEOUT 2500
+      #endif
       safe_delay(CUSTOM_BOOTSCREEN_TIMEOUT);
     }
 
@@ -173,6 +179,9 @@ void MarlinUI::set_font(const MarlinFont font_nr) {
         u8g.drawStr(txt2X, height - (MENU_FONT_HEIGHT) * 1 / 2, STRING_SPLASH_LINE2);
       #endif
     } while (u8g.nextPage());
+    #ifndef BOOTSCREEN_TIMEOUT
+      #define BOOTSCREEN_TIMEOUT 2500
+    #endif
     safe_delay(BOOTSCREEN_TIMEOUT);
   }
 
@@ -380,7 +389,7 @@ void MarlinUI::clear_lcd() { } // Automatically cleared by Picture Loop
     if (value != NULL) {
       lcd_put_wchar(':');
       if (extra_row) {
-        // Assume the value is numeric (with no descender)
+        // Assume that value is numeric (with no descender)
         baseline += EDIT_FONT_ASCENT + 2;
         onpage = PAGE_CONTAINS(baseline - (EDIT_FONT_ASCENT - 1), baseline);
       }

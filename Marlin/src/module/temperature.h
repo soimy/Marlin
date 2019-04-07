@@ -266,10 +266,6 @@ class Temperature {
                      soft_pwm_count_fan[FAN_COUNT];
     #endif
 
-    #if ENABLED(BABYSTEPPING)
-      static volatile int16_t babystepsTodo[3];
-    #endif
-
     #if ENABLED(PREVENT_COLD_EXTRUSION)
       static bool allow_cold_extrude;
       static int16_t extrude_min_temp;
@@ -572,7 +568,7 @@ class Temperature {
         #if HAS_HEATED_CHAMBER
           temp_chamber.target =
             #ifdef CHAMBER_MAXTEMP
-              min(celsius, CHAMBER_MAXTEMP)
+              MIN(celsius, CHAMBER_MAXTEMP)
             #else
               celsius
             #endif
@@ -673,7 +669,7 @@ class Temperature {
       #if ENABLED(NO_FAN_SLOWING_IN_PID_TUNING)
         static bool adaptive_fan_slowing;
       #elif ENABLED(ADAPTIVE_FAN_SLOWING)
-        constexpr static bool adaptive_fan_slowing = true;
+        static constexpr bool adaptive_fan_slowing = true;
       #endif
 
       /**
@@ -687,10 +683,6 @@ class Temperature {
         }
       #endif
 
-    #endif
-
-    #if ENABLED(BABYSTEPPING)
-      static void babystep_axis(const AxisEnum axis, const int16_t distance);
     #endif
 
     #if ENABLED(PROBING_HEATERS_OFF)

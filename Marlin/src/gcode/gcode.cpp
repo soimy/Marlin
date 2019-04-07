@@ -105,7 +105,7 @@ void GcodeSuite::get_destination_from_command() {
 
   #if ENABLED(POWER_LOSS_RECOVERY)
     // Only update power loss recovery on moves with E
-    if ((seen[E_AXIS] || seen[Z_AXIS]) && IS_SD_PRINTING()) recovery.save();
+    if (seen[E_AXIS] && (seen[X_AXIS] || seen[Y_AXIS]) && IS_SD_PRINTING()) recovery.save();
   #endif
 
   if (parser.linearval('F') > 0)
@@ -346,10 +346,6 @@ void GcodeSuite::process_parsed_command(
 
       #if ENABLED(Z_MIN_PROBE_REPEATABILITY_TEST)
         case 48: M48(); break;                                    // M48: Z probe repeatability test
-      #endif
-
-      #if ENABLED(G26_MESH_VALIDATION)
-        case 49: M49(); break;                                    // M49: Turn on or off G26 debug flag for verbose output
       #endif
 
       #if ENABLED(LCD_SET_PROGRESS_MANUALLY)
