@@ -36,7 +36,7 @@
 #include <Arduino.h>
 
 #undef DISABLED
-#define DISABLED(b) (!_CAT(SWITCH_ENABLED_, b))
+#define DISABLED(V...) DO(DIS,&&,V)
 
 #include "../shared/math_32bit.h"
 #include "../shared/HAL_SPI.h"
@@ -48,6 +48,7 @@
 #include "HAL_timers_ESP32.h"
 
 #include "WebSocketSerial.h"
+#include "FlushableHardwareSerial.h"
 
 // --------------------------------------------------------------------------
 // Defines
@@ -55,7 +56,7 @@
 
 extern portMUX_TYPE spinlock;
 
-#define MYSERIAL0 Serial
+#define MYSERIAL0 flushableSerial
 
 #if ENABLED(WIFISUPPORT)
   #define NUM_SERIAL 2

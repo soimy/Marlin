@@ -121,16 +121,16 @@ static void _lcd_move_xyz(PGM_P name, AxisEnum axis) {
     #endif
 
     // Get the new position
-    const float diff = float((int32_t)ui.encoderPosition) * move_menu_scale;
+    const float diff = float(int16_t(ui.encoderPosition)) * move_menu_scale;
     #if IS_KINEMATIC
       manual_move_offset += diff;
-      if ((int32_t)ui.encoderPosition < 0)
+      if (int16_t(ui.encoderPosition) < 0)
         NOLESS(manual_move_offset, min - current_position[axis]);
       else
         NOMORE(manual_move_offset, max - current_position[axis]);
     #else
       current_position[axis] += diff;
-      if ((int32_t)ui.encoderPosition < 0)
+      if (int16_t(ui.encoderPosition) < 0)
         NOLESS(current_position[axis], min);
       else
         NOMORE(current_position[axis], max);
@@ -161,7 +161,7 @@ static void _lcd_move_e(
   ui.encoder_direction_normal();
   if (ui.encoderPosition) {
     if (!ui.processing_manual_move) {
-      const float diff = float((int32_t)ui.encoderPosition) * move_menu_scale;
+      const float diff = float(int16_t(ui.encoderPosition)) * move_menu_scale;
       #if IS_KINEMATIC
         manual_move_offset += diff;
       #else
@@ -235,7 +235,7 @@ inline void lcd_move_e() { _lcd_move_e(); }
 screenFunc_t _manual_move_func_ptr;
 
 void _goto_manual_move(const float scale) {
-  ui.defer_status_screen(true);
+  ui.defer_status_screen();
   move_menu_scale = scale;
   ui.goto_screen(_manual_move_func_ptr);
 }
@@ -335,7 +335,7 @@ void menu_move() {
   else
     MENU_ITEM(gcode, MSG_AUTO_HOME, PSTR("G28"));
 
-  #if ENABLED(SWITCHING_EXTRUDER) || ENABLED(SWITCHING_NOZZLE)
+  #if EITHER(SWITCHING_EXTRUDER, SWITCHING_NOZZLE)
 
     #if EXTRUDERS == 6
       switch (active_extruder) {
@@ -376,7 +376,7 @@ void menu_move() {
 
   #endif
 
-  #if ENABLED(SWITCHING_EXTRUDER) || ENABLED(SWITCHING_NOZZLE)
+  #if EITHER(SWITCHING_EXTRUDER, SWITCHING_NOZZLE)
 
     // Only the current...
     MENU_ITEM(submenu, MSG_MOVE_E, lcd_move_get_e_amount);

@@ -41,7 +41,10 @@
 
 #include "ultralcd_DOGM.h"
 #include "u8g_fontutf8.h"
-#include "dogm_Bootscreen.h"
+
+#if ENABLED(SHOW_BOOTSCREEN)
+  #include "dogm_Bootscreen.h"
+#endif
 
 #include "../lcdprint.h"
 #include "../fontutils.h"
@@ -138,6 +141,9 @@ void MarlinUI::set_font(const MarlinFont font_nr) {
       #else
         draw_custom_bootscreen(custom_start_bmp);
       #endif
+      #ifndef CUSTOM_BOOTSCREEN_TIMEOUT
+        #define CUSTOM_BOOTSCREEN_TIMEOUT 2500
+      #endif
       safe_delay(CUSTOM_BOOTSCREEN_TIMEOUT);
     }
 
@@ -173,6 +179,9 @@ void MarlinUI::set_font(const MarlinFont font_nr) {
         u8g.drawStr(txt2X, height - (MENU_FONT_HEIGHT) * 1 / 2, STRING_SPLASH_LINE2);
       #endif
     } while (u8g.nextPage());
+    #ifndef BOOTSCREEN_TIMEOUT
+      #define BOOTSCREEN_TIMEOUT 2500
+    #endif
     safe_delay(BOOTSCREEN_TIMEOUT);
   }
 
@@ -189,7 +198,7 @@ void MarlinUI::init_lcd() {
     OUT_WRITE(LCD_BACKLIGHT_PIN, HIGH);
   #endif
 
-  #if ENABLED(MKS_12864OLED) || ENABLED(MKS_12864OLED_SSD1306)
+  #if EITHER(MKS_12864OLED, MKS_12864OLED_SSD1306)
     SET_OUTPUT(LCD_PINS_DC);
     #if !defined(LCD_RESET_PIN)
       #define LCD_RESET_PIN LCD_PINS_RS
@@ -380,7 +389,7 @@ void MarlinUI::clear_lcd() { } // Automatically cleared by Picture Loop
     if (value != NULL) {
       lcd_put_wchar(':');
       if (extra_row) {
-        // Assume the value is numeric (with no descender)
+        // Assume that value is numeric (with no descender)
         baseline += EDIT_FONT_ASCENT + 2;
         onpage = PAGE_CONTAINS(baseline - (EDIT_FONT_ASCENT - 1), baseline);
       }
@@ -390,6 +399,27 @@ void MarlinUI::clear_lcd() { } // Automatically cleared by Picture Loop
         lcd_put_u8str(value);
       }
     }
+  }
+
+  inline void draw_boxed_string(const uint8_t x, const uint8_t y, PGM_P const pstr, const bool inv) {
+    const uint8_t len = utf8_strlen_P(pstr), bw = len * (MENU_FONT_WIDTH),
+                  bx = x * (MENU_FONT_WIDTH), by = (y + 1) * (MENU_FONT_HEIGHT);
+    if (inv) {
+      u8g.setColorIndex(1);
+      u8g.drawBox(bx - 1, by - (MENU_FONT_ASCENT) + 1, bw + 2, MENU_FONT_HEIGHT - 1);
+      u8g.setColorIndex(0);
+    }
+    lcd_moveto(bx, by);
+    lcd_put_u8str_P(pstr);
+    if (inv) u8g.setColorIndex(1);
+  }
+
+  void draw_select_screen(PGM_P const yes, PGM_P const no, const bool yesno, PGM_P const pref, const char * const string, PGM_P const suff) {
+    SETCURSOR(0, 0); lcd_put_u8str_P(pref);
+    if (string) wrap_string(1, string);
+    if (suff) lcd_put_u8str_P(suff);
+    draw_boxed_string(1, LCD_HEIGHT - 1, no, !yesno);
+    draw_boxed_string(LCD_WIDTH - (utf8_strlen_P(yes) + 1), LCD_HEIGHT - 1, yes, yesno);
   }
 
   #if ENABLED(SDSUPPORT)
@@ -497,7 +527,7 @@ void MarlinUI::clear_lcd() { } // Automatically cleared by Picture Loop
 
   #endif // AUTO_BED_LEVELING_UBL
 
-  #if ENABLED(BABYSTEP_ZPROBE_GFX_OVERLAY) || ENABLED(MESH_EDIT_GFX_OVERLAY)
+  #if EITHER(BABYSTEP_ZPROBE_GFX_OVERLAY, MESH_EDIT_GFX_OVERLAY)
 
     const unsigned char cw_bmp[] PROGMEM = {
       B00000011,B11111000,B00000000,
