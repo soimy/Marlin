@@ -96,6 +96,8 @@
   #undef BEEPER_PIN
   #undef KILL_PIN
 
+  
+
   //
   // VIKI2 12-wire lead
   //
@@ -142,3 +144,13 @@
   #define STAT_LED_BLUE_PIN 17
 
 #endif
+
+// TMC2130 change
+// #if HAS_DRIVER(TMC2130)
+  #undef X_MAX_PIN
+  #undef Y_MIN_PIN
+  #undef Y_MAX_PIN
+  #define X_MAX_PIN 3
+  #define Y_MIN_PIN 2
+  #define Y_MAX_PIN 2
+// #endif
