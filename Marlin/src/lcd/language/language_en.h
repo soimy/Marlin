@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,6 +66,9 @@
 #endif
 #ifndef MSG_SD_REMOVED
   #define MSG_SD_REMOVED                      _UxGT("Card removed")
+#endif
+#ifndef MSG_SD_RELEASED
+  #define MSG_SD_RELEASED                     _UxGT("Card released")
 #endif
 #ifndef MSG_LCD_ENDSTOPS
   #define MSG_LCD_ENDSTOPS                    _UxGT("Endstops") // Max length 8 characters
@@ -187,6 +190,18 @@
 #ifndef MSG_LASER_POWER
   #define MSG_LASER_POWER                     _UxGT("Laser power")
 #endif
+#ifndef MSG_SPINDLE_MENU
+  #define MSG_SPINDLE_MENU                    _UxGT("Spindle Control")
+#endif
+#ifndef MSG_SPINDLE_OFF
+  #define MSG_SPINDLE_OFF                     _UxGT("Spindle Off")
+#endif
+#ifndef MSG_SPINDLE_ON
+  #define MSG_SPINDLE_ON                      _UxGT("Spindle On")
+#endif
+#ifndef MSG_SPINDLE_POWER
+  #define MSG_SPINDLE_POWER                   _UxGT("Spindle power")
+#endif
 #ifndef MSG_SPINDLE_REVERSE
   #define MSG_SPINDLE_REVERSE                 _UxGT("Spindle Reverse")
 #endif
@@ -243,6 +258,12 @@
 #endif
 #ifndef MSG_UBL_LEVEL_BED
   #define MSG_UBL_LEVEL_BED                   _UxGT("Unified Bed Leveling")
+#endif
+#ifndef MSG_LCD_PROBING_MESH
+  #define MSG_LCD_PROBING_MESH                _UxGT("Probing point")
+#endif
+#ifndef MSG_LCD_TILTING_MESH
+  #define MSG_LCD_TILTING_MESH                _UxGT("Tilting point")
 #endif
 #ifndef MSG_IDEX_MENU
   #define MSG_IDEX_MENU                       _UxGT("IDEX Mode")
@@ -522,6 +543,9 @@
 #ifndef MSG_HOTEND_TOO_COLD
   #define MSG_HOTEND_TOO_COLD                 _UxGT("Hotend too cold")
 #endif
+#ifndef MSG_MOVE_0025MM
+  #define MSG_MOVE_0025MM                     _UxGT("Move 0.025mm")
+#endif
 #ifndef MSG_MOVE_01MM
   #define MSG_MOVE_01MM                       _UxGT("Move 0.1mm")
 #endif
@@ -753,11 +777,26 @@
 #ifndef MSG_START_PRINT
   #define MSG_START_PRINT                     _UxGT("Start print")
 #endif
+#ifndef MSG_BUTTON_NEXT
+  #define MSG_BUTTON_NEXT                     _UxGT("Next")
+#endif
+#ifndef MSG_BUTTON_INIT
+  #define MSG_BUTTON_INIT                     _UxGT("Init")
+#endif
+#ifndef MSG_BUTTON_STOP
+  #define MSG_BUTTON_STOP                     _UxGT("Stop")
+#endif
 #ifndef MSG_BUTTON_PRINT
   #define MSG_BUTTON_PRINT                    _UxGT("Print")
 #endif
+#ifndef MSG_BUTTON_RESET
+  #define MSG_BUTTON_RESET                    _UxGT("Reset")
+#endif
 #ifndef MSG_BUTTON_CANCEL
   #define MSG_BUTTON_CANCEL                   _UxGT("Cancel")
+#endif
+#ifndef MSG_BUTTON_DONE
+  #define MSG_BUTTON_DONE                     _UxGT("Done")
 #endif
 #ifndef MSG_PAUSE_PRINT
   #define MSG_PAUSE_PRINT                     _UxGT("Pause print")
@@ -829,13 +868,16 @@
   #define MSG_AUTORETRACT                     _UxGT("AutoRetr.")
 #endif
 #ifndef MSG_FILAMENT_SWAP_LENGTH
-  #define MSG_FILAMENT_SWAP_LENGTH            _UxGT("Retract Distance")
+  #define MSG_FILAMENT_SWAP_LENGTH            _UxGT("Swap Length")
+#endif
+#ifndef MSG_FILAMENT_PURGE_LENGTH
+  #define MSG_FILAMENT_PURGE_LENGTH           _UxGT("Purge Length")
 #endif
 #ifndef MSG_TOOL_CHANGE
-  #define MSG_TOOL_CHANGE                      _UxGT("Tool Change")
+  #define MSG_TOOL_CHANGE                     _UxGT("Tool Change")
 #endif
 #ifndef MSG_TOOL_CHANGE_ZLIFT
-  #define MSG_TOOL_CHANGE_ZLIFT                _UxGT("Z Raise")
+  #define MSG_TOOL_CHANGE_ZLIFT               _UxGT("Z Raise")
 #endif
 #ifndef MSG_SINGLENOZZLE_PRIME_SPD
   #define MSG_SINGLENOZZLE_PRIME_SPD          _UxGT("Prime Speed")
@@ -864,6 +906,9 @@
 #ifndef MSG_CHANGE_SDCARD
   #define MSG_CHANGE_SDCARD                   _UxGT("Change SD card")
 #endif
+#ifndef MSG_RELEASE_SDCARD
+  #define MSG_RELEASE_SDCARD                  _UxGT("Release SD card")
+#endif
 #ifndef MSG_ZPROBE_OUT
   #define MSG_ZPROBE_OUT                      _UxGT("Z Probe past bed")
 #endif
@@ -874,25 +919,55 @@
   #define MSG_BLTOUCH                         _UxGT("BLTouch")
 #endif
 #ifndef MSG_BLTOUCH_SELFTEST
-  #define MSG_BLTOUCH_SELFTEST                _UxGT("BLTouch Self-Test")
+  #define MSG_BLTOUCH_SELFTEST                _UxGT("Cmd: Self-Test")
 #endif
 #ifndef MSG_BLTOUCH_RESET
-  #define MSG_BLTOUCH_RESET                   _UxGT("Reset BLTouch")
-#endif
-#ifndef MSG_BLTOUCH_DEPLOY
-  #define MSG_BLTOUCH_DEPLOY                  _UxGT("Deploy BLTouch")
-#endif
-#ifndef MSG_BLTOUCH_SW_MODE
-  #define MSG_BLTOUCH_SW_MODE                 _UxGT("SW Deploy BLTouch")
-#endif
-#ifndef MSG_BLTOUCH_5V_MODE
-  #define MSG_BLTOUCH_5V_MODE                 _UxGT("BLTouch 5V Mode")
-#endif
-#ifndef MSG_BLTOUCH_OD_MODE
-  #define MSG_BLTOUCH_OD_MODE                 _UxGT("BLTouch OD Mode")
+  #define MSG_BLTOUCH_RESET                   _UxGT("Cmd: Reset")
 #endif
 #ifndef MSG_BLTOUCH_STOW
-  #define MSG_BLTOUCH_STOW                    _UxGT("Stow BLTouch")
+  #define MSG_BLTOUCH_STOW                    _UxGT("Cmd: Stow")
+#endif
+#ifndef MSG_BLTOUCH_DEPLOY
+  #define MSG_BLTOUCH_DEPLOY                  _UxGT("Cmd: Deploy")
+#endif
+#ifndef MSG_BLTOUCH_SW_MODE
+  #define MSG_BLTOUCH_SW_MODE                 _UxGT("Cmd: SW-Mode")
+#endif
+#ifndef MSG_BLTOUCH_5V_MODE
+  #define MSG_BLTOUCH_5V_MODE                 _UxGT("Cmd: 5V-Mode")
+#endif
+#ifndef MSG_BLTOUCH_OD_MODE
+  #define MSG_BLTOUCH_OD_MODE                 _UxGT("Cmd: OD-Mode")
+#endif
+#ifndef MSG_BLTOUCH_MODE_STORE
+  #define MSG_BLTOUCH_MODE_STORE              _UxGT("Cmd: Mode-Store")
+#endif
+#ifndef MSG_BLTOUCH_MODE_STORE_5V
+  #define MSG_BLTOUCH_MODE_STORE_5V           _UxGT("Set BLTouch to 5V")
+#endif
+#ifndef MSG_BLTOUCH_MODE_STORE_OD
+  #define MSG_BLTOUCH_MODE_STORE_OD           _UxGT("Set BLTouch to OD")
+#endif
+#ifndef MSG_BLTOUCH_MODE_ECHO
+  #define MSG_BLTOUCH_MODE_ECHO               _UxGT("Report Drain")
+#endif
+#ifndef MSG_BLTOUCH_MODE_CHANGE
+  #define MSG_BLTOUCH_MODE_CHANGE             _UxGT("DANGER: Bad settings can cause damage! Proceed anyway?")
+#endif
+#ifndef MSG_TOUCHMI_PROBE
+  #define MSG_TOUCHMI_PROBE                   _UxGT("TouchMI")
+#endif
+#ifndef MSG_TOUCHMI_INIT
+  #define MSG_TOUCHMI_INIT                    _UxGT("Init TouchMI")
+#endif
+#ifndef MSG_TOUCHMI_ZTEST
+  #define MSG_TOUCHMI_ZTEST                   _UxGT("Z offset Test")
+#endif
+#ifndef MSG_TOUCHMI_SAVE
+  #define MSG_TOUCHMI_SAVE                    _UxGT("Save")
+#endif
+#ifndef MSG_MANUAL_DEPLOY_TOUCHMI
+  #define MSG_MANUAL_DEPLOY_TOUCHMI           _UxGT("Deploy TouchMI")
 #endif
 #ifndef MSG_MANUAL_DEPLOY
   #define MSG_MANUAL_DEPLOY                   _UxGT("Deploy Z-Probe")
@@ -930,6 +1005,9 @@
 #ifndef MSG_HEATING_FAILED_LCD_BED
   #define MSG_HEATING_FAILED_LCD_BED          _UxGT("Bed heating failed")
 #endif
+#ifndef MSG_HEATING_FAILED_LCD_CHAMBER
+  #define MSG_HEATING_FAILED_LCD_CHAMBER      _UxGT("Chamber heating fail")
+#endif
 #ifndef MSG_ERR_REDUNDANT_TEMP
   #define MSG_ERR_REDUNDANT_TEMP              _UxGT("Err: REDUNDANT TEMP")
 #endif
@@ -938,6 +1016,9 @@
 #endif
 #ifndef MSG_THERMAL_RUNAWAY_BED
   #define MSG_THERMAL_RUNAWAY_BED             _UxGT("BED THERMAL RUNAWAY")
+#endif
+#ifndef MSG_THERMAL_RUNAWAY_CHAMBER
+  #define MSG_THERMAL_RUNAWAY_CHAMBER         _UxGT("CHAMBER T. RUNAWAY")
 #endif
 #ifndef MSG_ERR_MAXTEMP
   #define MSG_ERR_MAXTEMP                     _UxGT("Err: MAXTEMP")
@@ -986,6 +1067,12 @@
 #endif
 #ifndef MSG_BED_COOLING
   #define MSG_BED_COOLING                     _UxGT("Bed cooling...")
+#endif
+#ifndef MSG_CHAMBER_HEATING
+  #define MSG_CHAMBER_HEATING                 _UxGT("Chamber heating...")
+#endif
+#ifndef MSG_CHAMBER_COOLING
+  #define MSG_CHAMBER_COOLING                 _UxGT("Chamber cooling...")
 #endif
 #ifndef MSG_DELTA_CALIBRATE
   #define MSG_DELTA_CALIBRATE                 _UxGT("Delta Calibration")
@@ -1142,6 +1229,9 @@
 #endif
 #ifndef MSG_RUNOUT_SENSOR
   #define MSG_RUNOUT_SENSOR                   _UxGT("Runout Sensor")
+#endif
+#ifndef MSG_RUNOUT_DISTANCE_MM
+  #define MSG_RUNOUT_DISTANCE_MM              _UxGT("Runout Dist mm")
 #endif
 #ifndef MSG_ERR_HOMING_FAILED
   #define MSG_ERR_HOMING_FAILED               _UxGT("Homing failed")
