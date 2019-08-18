@@ -852,6 +852,7 @@
 #define BLTOUCH
 #if ENABLED(BLTOUCH)
   //#define BLTOUCH_DELAY 375   // (ms) Enable and increase if needed
+#endif
 
 /**
  * Touch-MI Probe by hotends.fr
