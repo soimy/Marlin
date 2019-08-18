@@ -47,6 +47,7 @@
 #define X_STOP_PIN         22
 #define Y_STOP_PIN         26
 #define Z_STOP_PIN         29
+#define Z_MIN_PIN          29
 
 //
 // Steppers
@@ -120,6 +121,7 @@
 #define LCD_PINS_D5        21
 #define LCD_PINS_D6         5
 #define LCD_PINS_D7         6
+#define LCD_RESET_PIN       5 
 
 // Buttons are directly attached
 #define BTN_EN1            40
@@ -138,3 +140,8 @@
   #undef LED_PIN
   #define CASE_LIGHT_PIN            8
 #endif
+
+//
+// Servos
+//
+#define SERVO0_PIN     30   // EXT/IO pin5(PC7) 
