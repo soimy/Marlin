@@ -268,6 +268,12 @@ void MarlinUI::init_lcd() {
     #endif
   #endif
 
+  #if ENABLED(ULTI_CONTROLLER)
+    #ifndef LCD_RESET_PIN
+      #define LCD_RESET_PIN LCD_PINS_D6
+    #endif
+  #endif
+
   #if PIN_EXISTS(LCD_RESET)
     // Perform a clean hardware reset with needed delays
     OUT_WRITE(LCD_RESET_PIN, LOW);
