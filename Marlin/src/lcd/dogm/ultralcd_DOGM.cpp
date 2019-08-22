@@ -102,6 +102,8 @@ void MarlinUI::set_font(const MarlinFont font_nr) {
   }
 }
 
+bool MarlinUI::detected() { return true; }
+
 #if ENABLED(SHOW_BOOTSCREEN)
 
   #if ENABLED(SHOW_CUSTOM_BOOTSCREEN)
@@ -263,6 +265,12 @@ void MarlinUI::init_lcd() {
     SET_OUTPUT(LCD_PINS_DC);
     #ifndef LCD_RESET_PIN
       #define LCD_RESET_PIN LCD_PINS_RS
+    #endif
+  #endif
+
+  #if ENABLED(ULTI_CONTROLLER)
+    #ifndef LCD_RESET_PIN
+      #define LCD_RESET_PIN LCD_PINS_D6
     #endif
   #endif
 
