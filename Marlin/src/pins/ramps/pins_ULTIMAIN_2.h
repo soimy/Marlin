@@ -47,7 +47,6 @@
 #define X_STOP_PIN         22
 #define Y_STOP_PIN         26
 #define Z_STOP_PIN         29
-#define Z_MIN_PIN          29
 
 //
 // Steppers
@@ -145,3 +144,9 @@
 // Servos
 //
 #define SERVO0_PIN     30   // EXT/IO pin5(PC7) 
+
+// Extruder cooling fan
+#define E0_AUTO_FAN_PIN     14  // EXP1-Pin5 TXD3/PJ1
+
+// Controller auto fan
+#define CONTROLLER_FAN_PIN      6   // Set a custom pin for the controller fan
