@@ -734,7 +734,7 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4[, E5]]]]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 78.74, 78.74, 400, 837 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 369 }
 
 /**
  * Default Max Feed Rate (mm/s)
@@ -1031,7 +1031,7 @@
 // @section extruder
 
 // For direct drive extruder v9 set to true, for geared extruder set to false.
-#define INVERT_E0_DIR false 
+#define INVERT_E0_DIR true 
 #define INVERT_E1_DIR false 
 #define INVERT_E2_DIR false
 #define INVERT_E3_DIR false
@@ -1065,7 +1065,7 @@
 #define Z_MIN_POS 0
 #define X_MAX_POS X_BED_SIZE
 #define Y_MAX_POS Y_BED_SIZE
-#define Z_MAX_POS 213 
+#define Z_MAX_POS 204 
 
 /**
  * Software Endstops
