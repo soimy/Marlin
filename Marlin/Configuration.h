@@ -486,12 +486,9 @@
   #define  DEFAULT_Kd 70.0
   */
 
-  // #define DEFAULT_Kp 22.2
-  // #define DEFAULT_Ki 1.08
-  // #define DEFAULT_Kd 114
-  #define DEFAULT_Kp 12.92
-  #define DEFAULT_Ki 0.69
-  #define DEFAULT_Kd 60.59
+  #define DEFAULT_Kp 22.2
+  #define DEFAULT_Ki 1.08
+  #define DEFAULT_Kd 114
 
   // MakerGear
   //#define DEFAULT_Kp 7.0
@@ -543,6 +540,8 @@
   // #define DEFAULT_bedKp 10.00
   // #define DEFAULT_bedKi .023
   // #define DEFAULT_bedKd 305.4
+
+  // DWMaker pcb alumium heat bed
   #define DEFAULT_bedKp 48.09
   #define DEFAULT_bedKi 9.31
   #define DEFAULT_bedKd 165.69
@@ -734,7 +733,7 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4[, E5]]]]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 369 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 369 } // DWMaker dual geared extruder e-step is 369
 
 /**
  * Default Max Feed Rate (mm/s)
@@ -835,7 +834,7 @@
  *      - normally-open switches to 5V and D32.
  *
  */
-#define Z_MIN_PROBE_PIN 38 // EXT/IO Pin6(PD7) 
+// #define Z_MIN_PROBE_PIN 38 // EXT/IO Pin6(PD7) as bltouch servo pin
 
 /**
  * Probe Type
@@ -849,8 +848,8 @@
  * Use G29 repeatedly, adjusting the Z height at each point with movement commands
  * or (with LCD_BED_LEVELING) the LCD controller.
  */
-// #define PROBE_MANUALLY
-// #define MANUAL_PROBE_START_Z 0.2
+#define PROBE_MANUALLY
+#define MANUAL_PROBE_START_Z 1
 
 /**
  * A Fix-Mounted Probe either doesn't deploy or needs manual deployment.
@@ -867,7 +866,7 @@
 /**
  * The BLTouch probe uses a Hall effect sensor and emulates a servo.
  */
-#define BLTOUCH
+// #define BLTOUCH
 
 /**
  * Touch-MI Probe by hotends.fr
@@ -923,9 +922,9 @@
  *     O-- FRONT --+
  *   (0,0)
  */
-#define X_PROBE_OFFSET_FROM_EXTRUDER -38 // X offset: -left  +right  [of the nozzle]
-#define Y_PROBE_OFFSET_FROM_EXTRUDER 27  // Y offset: -front +behind [the nozzle]
-#define Z_PROBE_OFFSET_FROM_EXTRUDER 0   // Z offset: -below +above  [the nozzle]
+#define X_PROBE_OFFSET_FROM_EXTRUDER 0 // X offset: -left  +right  [of the nozzle]
+#define Y_PROBE_OFFSET_FROM_EXTRUDER 0 // Y offset: -front +behind [the nozzle]
+#define Z_PROBE_OFFSET_FROM_EXTRUDER 0 // Z offset: -below +above  [the nozzle]
 
 // Certain types of probes need to stay away from edges
 #define MIN_PROBE_EDGE 5 
@@ -1065,7 +1064,7 @@
 #define Z_MIN_POS 0
 #define X_MAX_POS X_BED_SIZE
 #define Y_MAX_POS Y_BED_SIZE
-#define Z_MAX_POS 204 
+#define Z_MAX_POS 230
 
 /**
  * Software Endstops
@@ -1168,9 +1167,9 @@
  */
 //#define AUTO_BED_LEVELING_3POINT
 //#define AUTO_BED_LEVELING_LINEAR
-#define AUTO_BED_LEVELING_BILINEAR
+//#define AUTO_BED_LEVELING_BILINEAR
 //#define AUTO_BED_LEVELING_UBL
-// #define MESH_BED_LEVELING
+#define MESH_BED_LEVELING
 
 /**
  * Normally G28 leaves leveling disabled on completion. Enable
@@ -1268,7 +1267,7 @@
   //=================================== Mesh ==================================
   //===========================================================================
 
-  #define MESH_INSET 10          // Set Mesh bounds as an inset region of the bed
+  #define MESH_INSET 5           // Set Mesh bounds as an inset region of the bed
   #define GRID_MAX_POINTS_X 3    // Don't use more than 7 points per axis, implementation limited.
   #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
 
@@ -1308,7 +1307,7 @@
   #define LEVEL_CORNERS_INSET 30    // (mm) An inset for corner leveling
   #define LEVEL_CORNERS_Z_HOP  4.0  // (mm) Move nozzle up before moving between corners
   #define LEVEL_CORNERS_HEIGHT 0.0  // (mm) Z height of nozzle at leveling points
-  //#define LEVEL_CENTER_TOO        // Move to the center after the last corner
+  #define LEVEL_CENTER_TOO          // Move to the center after the last corner
 #endif
 
 /**
