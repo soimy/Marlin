@@ -184,6 +184,7 @@
     #define LCD_PINS_D5    25
     #define LCD_PINS_D6    27
     #define LCD_PINS_D7    29
+    #define LCD_RESET_PIN  27 //  This controller need a reset pin
 
     #if ENABLED(MINIPANEL)
       #define DOGLCD_CS    25

@@ -165,6 +165,7 @@
 
   #define IS_ULTIPANEL
   #define U8GLIB_SSD1309
+  // #define LCD_RESET_PIN LCD_PINS_D6 //  This controller need a reset pin
   #define LCD_CONTRAST_MIN    0
   #define LCD_CONTRAST_MAX  254
   #define LCD_CONTRAST_INIT 127
