@@ -146,4 +146,5 @@
 #define SERVO0_PIN     30   // EXT/IO pin5(PC7) 
 
 // Extruder cooling fan
-#define ULTIMAIN_HIDDEN_PJ6  // Hacked temperature.cpp tag for hidden PJ6 on UMB2.1.4 
+// #define ULTIMAIN_HIDDEN_PJ6  // Hacked temperature.cpp tag for hidden PJ6 on UMB2.1.4 
+#define E0_AUTO_FAN_PIN   77
