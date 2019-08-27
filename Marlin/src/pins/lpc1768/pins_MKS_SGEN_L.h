@@ -213,6 +213,7 @@
     #define SD_DETECT_PIN  P0_27
 
     #if ENABLED(FYSETC_MINI_12864)
+    // #if ENABLED(MKS_12864OLED_SSD1306)
       #define DOGLCD_CS    P0_18
       #define DOGLCD_A0    P0_16
       #define DOGLCD_SCK   P0_7
@@ -242,15 +243,16 @@
 
     #else // !FYSETC_MINI_12864
 
-      #if ENABLED(MKS_MINI_12864)
+      #if EITHER(MKS_12864OLED, MKS_12864OLED_SSD1306)
         #define DOGLCD_CS  P0_17
-        #define DOGLCD_A0  P1_0
+        #define DOGLCD_A0  P1_00
       #endif
 
       #if ENABLED(ULTIPANEL)
         #define LCD_PINS_D5 P0_17
-        #define LCD_PINS_D6 P1_0
+        #define LCD_PINS_D6 P1_00
         #define LCD_PINS_D7 P1_22
+        #define LCD_PINS_DC DOGLCD_A0    // Set as output on init
       #endif
 
     #endif // !FYSETC_MINI_12864
