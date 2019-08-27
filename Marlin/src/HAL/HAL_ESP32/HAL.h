@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  * Copyright (c) 2016 Bob Cousins bobcousins42@googlemail.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,20 +24,9 @@
 
 #define CPU_32_BIT
 
-// --------------------------------------------------------------------------
-// Includes
-// --------------------------------------------------------------------------
-
 #include <stdint.h>
 
-#undef DISABLED
-#undef M_PI
-
-#include <Arduino.h>
-
-#undef DISABLED
-#define DISABLED(V...) DO(DIS,&&,V)
-
+#include "../shared/Marduino.h"
 #include "../shared/math_32bit.h"
 #include "../shared/HAL_SPI.h"
 
@@ -50,9 +39,9 @@
 #include "WebSocketSerial.h"
 #include "FlushableHardwareSerial.h"
 
-// --------------------------------------------------------------------------
+// ------------------------
 // Defines
-// --------------------------------------------------------------------------
+// ------------------------
 
 extern portMUX_TYPE spinlock;
 
@@ -76,22 +65,24 @@ extern portMUX_TYPE spinlock;
 #undef pgm_read_ptr
 #define pgm_read_ptr(addr) (*(addr))
 
-// --------------------------------------------------------------------------
+// ------------------------
 // Types
-// --------------------------------------------------------------------------
+// ------------------------
 
 typedef int16_t pin_t;
 
-// --------------------------------------------------------------------------
+#define HAL_SERVO_LIB Servo
+
+// ------------------------
 // Public Variables
-// --------------------------------------------------------------------------
+// ------------------------
 
 /** result of last ADC conversion */
 extern uint16_t HAL_adc_result;
 
-// --------------------------------------------------------------------------
+// ------------------------
 // Public functions
-// --------------------------------------------------------------------------
+// ------------------------
 
 // clear reset reason
 void HAL_clear_reset_source (void);
@@ -101,9 +92,12 @@ uint8_t HAL_get_reset_source(void);
 
 void _delay_ms(int delay);
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
 int freeMemory(void);
+#pragma GCC diagnostic pop
 
-void analogWrite(int pin, int value);
+void analogWrite(pin_t pin, int value);
 
 // EEPROM
 void eeprom_write_byte(uint8_t *pos, unsigned char value);
@@ -128,6 +122,7 @@ void HAL_adc_start_conversion(uint8_t adc_pin);
 
 // Enable hooks into idle and setup for HAL
 #define HAL_IDLETASK 1
-#define HAL_INIT 1
+#define BOARD_INIT() HAL_init_board();
 void HAL_idletask(void);
 void HAL_init(void);
+void HAL_init_board(void);
