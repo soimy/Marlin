@@ -96,6 +96,7 @@
 //
 // Software SPI pins for TMC2130 stepper drivers
 //
+#define TMC_USE_SW_SPI
 #if ENABLED(TMC_USE_SW_SPI)
   #ifndef TMC_SW_MOSI
     #define TMC_SW_MOSI    P4_28
@@ -201,68 +202,89 @@
     #define LCD_PINS_D4    P0_17
 
   #else
-    #define LCD_PINS_RS    P0_16
+    #if EITHER(MKS_12864OLED, MKS_12864OLED_SSD1306)
+      /* This configuration uses the following arrangement:
+      *
+      * EXP1 D37 = EN2   D35 = EN1     EXP2 D50 = MISO  D52 = SCK
+      *      D17 = BLUE  D16 = RED          D31 = ENC   D53 = SDCS
+      *      D23 = KILL  D25 = BUZZ         D33 = ---   D51 = MOSI
+      *      D27 = A0    D29 = LCS          D49 = SDCD  RST = ---
+      *      GND = GND   5V  = 5V           GND = ---   D41 = ---
+      */
+      #define SD_DETECT_PIN   P0_27 
+      // #define KILL_PIN          41
+      #define BTN_EN1         P3_25
+      #define BTN_EN2         P3_26
 
-    #define BTN_EN1        P3_25
-    #define BTN_EN2        P3_26
-
-    #define LCD_PINS_ENABLE P0_18
-    #define LCD_PINS_D4    P0_15
-
-    #define LCD_SDSS       P0_28
-    #define SD_DETECT_PIN  P0_27
-
-    #if ENABLED(FYSETC_MINI_12864)
-    // #if ENABLED(MKS_12864OLED_SSD1306)
-      #define DOGLCD_CS    P0_18
-      #define DOGLCD_A0    P0_16
-      #define DOGLCD_SCK   P0_07
-      #define DOGLCD_MOSI  P1_20
-      #define FORCE_SOFT_SPI
-
-      #define LCD_BACKLIGHT_PIN -1
+      #define LCD_PINS_DC     P0_17 // Set as output on init
+      #define LCD_PINS_RS     P1_00  // Pull low for 1s to init
+      // DOGM SPI LCD Support
+      #define DOGLCD_CS       P0_16 
+      #define DOGLCD_MOSI     P0_18 
+      #define DOGLCD_SCK      P0_15 
+      #define DOGLCD_A0       P0_17 
 
       #define FORCE_SOFT_SPI      // Use this if default of hardware SPI causes display problems
                                   //   results in LCD soft SPI mode 3, SD soft SPI mode 0
+    #else
+      #define LCD_PINS_RS    P0_16
 
-      #define LCD_RESET_PIN P0_15   // Must be high or open for LCD to operate normally.
+      #define BTN_EN1        P3_25
+      #define BTN_EN2        P3_26
 
-      #if EITHER(FYSETC_MINI_12864_1_2, FYSETC_MINI_12864_2_0)
-        #ifndef RGB_LED_R_PIN
-          #define RGB_LED_R_PIN P0_17
+      #define LCD_PINS_ENABLE P0_18
+      #define LCD_PINS_D4    P0_15
+
+      #define LCD_SDSS       P0_28
+      #define SD_DETECT_PIN  P0_27
+
+      #if ENABLED(FYSETC_MINI_12864)
+        #define DOGLCD_CS    P0_18
+        #define DOGLCD_A0    P0_16
+        #define DOGLCD_SCK   P0_07
+        #define DOGLCD_MOSI  P1_20
+        #define FORCE_SOFT_SPI
+
+        #define LCD_BACKLIGHT_PIN -1
+
+        #define FORCE_SOFT_SPI      // Use this if default of hardware SPI causes display problems
+                                    //   results in LCD soft SPI mode 3, SD soft SPI mode 0
+
+        #define LCD_RESET_PIN P0_15   // Must be high or open for LCD to operate normally.
+
+        #if EITHER(FYSETC_MINI_12864_1_2, FYSETC_MINI_12864_2_0)
+          #ifndef RGB_LED_R_PIN
+            #define RGB_LED_R_PIN P0_17
+          #endif
+          #ifndef RGB_LED_G_PIN
+            #define RGB_LED_G_PIN P1_00
+          #endif
+          #ifndef RGB_LED_B_PIN
+            #define RGB_LED_B_PIN P1_22
+          #endif
+        #elif ENABLED(FYSETC_MINI_12864_2_1)
+          #define NEOPIXEL_PIN    P0_17
         #endif
-        #ifndef RGB_LED_G_PIN
-          #define RGB_LED_G_PIN P1_00
+
+      #else // !FYSETC_MINI_12864
+
+        #if ENABLED(ULTIPANEL)
+          #define LCD_PINS_D5 P0_17
+          // #define LCD_PINS_D6 P1_00
+          #define LCD_PINS_D7 P1_22
+          // #define LCD_PINS_DC DOGLCD_A0    // Set as output on init
         #endif
-        #ifndef RGB_LED_B_PIN
-          #define RGB_LED_B_PIN P1_22
-        #endif
-      #elif ENABLED(FYSETC_MINI_12864_2_1)
-        #define NEOPIXEL_PIN    P0_17
-      #endif
 
-    #else // !FYSETC_MINI_12864
+      #endif // !FYSETC_MINI_12864
 
-      #if EITHER(MKS_12864OLED, MKS_12864OLED_SSD1306)
-        #define DOGLCD_CS  P0_17
-        #define DOGLCD_A0  P1_00
-      #endif
-
-      #if ENABLED(ULTIPANEL)
-        #define LCD_PINS_D5 P0_17
-        #define LCD_PINS_D6 P1_00
-        #define LCD_PINS_D7 P1_22
-        #define LCD_PINS_DC DOGLCD_A0    // Set as output on init
-      #endif
-
-    #endif // !FYSETC_MINI_12864
+    #endif // !MKS_OLED
 
   #endif
 
 #endif // HAS_SPI_LCD
 
 #ifndef SDCARD_CONNECTION
-  #define SDCARD_CONNECTION ONBOARD
+  #define SDCARD_CONNECTION LCD 
 #endif
 
 #define ONBOARD_SD_CS_PIN  P0_06   // Chip select for "System" SD card
