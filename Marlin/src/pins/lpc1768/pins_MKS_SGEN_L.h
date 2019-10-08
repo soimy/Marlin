@@ -36,7 +36,7 @@
 // Servos
 //
 #define SERVO0_PIN         P1_23   // SERVO P1.23
-#define SERVO1_PIN         P2_00   // SERVO P2.0
+// #define SERVO1_PIN         P2_00   // SERVO P2.0
 
 //
 // Limit Switches
@@ -86,12 +86,12 @@
   #define E0_CS_PIN        P1_15
 #endif
 
-#define E1_STEP_PIN        P0_01
-#define E1_DIR_PIN         P0_00
-#define E1_ENABLE_PIN      P0_10
-#ifndef E1_CS_PIN
-  #define E1_CS_PIN        P1_17
-#endif
+// #define E1_STEP_PIN        P0_01
+// #define E1_DIR_PIN         P0_00
+// #define E1_ENABLE_PIN      P0_10
+// #ifndef E1_CS_PIN
+//   #define E1_CS_PIN        P1_17
+// #endif
 
 //
 // Software SPI pins for TMC2130 stepper drivers
@@ -201,84 +201,39 @@
     #define LCD_PINS_ENABLE P1_22
     #define LCD_PINS_D4    P0_17
 
-  #else
-    #if EITHER(MKS_12864OLED, MKS_12864OLED_SSD1306)
-      /* This configuration uses the following arrangement:
-      *
-      * EXP1 D37 = EN2   D35 = EN1     EXP2 D50 = MISO  D52 = SCK
-      *      D17 = BLUE  D16 = RED          D31 = ENC   D53 = SDCS
-      *      D23 = KILL  D25 = BUZZ         D33 = ---   D51 = MOSI
-      *      D27 = A0    D29 = LCS          D49 = SDCD  RST = ---
-      *      GND = GND   5V  = 5V           GND = ---   D41 = ---
-      */
-      #define SD_DETECT_PIN   P0_27 
-      // #define KILL_PIN          41
-      #define BTN_EN1         P3_25
-      #define BTN_EN2         P3_26
+  #elif EITHER(MKS_12864OLED, MKS_12864OLED_SSD1306)
+    /* This configuration uses the following arrangement:
+    *
+    * EXP1 D37 = EN2   D35 = EN1     EXP2 D50 = MISO  D52 = SCK
+    *      D17 = BLUE  D16 = RED          D31 = ENC   D53 = SDCS
+    *      D23 = KILL  D25 = BUZZ         D33 = ---   D51 = MOSI
+    *      D27 = A0    D29 = LCS          D49 = SDCD  RST = ---
+    *      GND = GND   5V  = 5V           GND = ---   D41 = ---
+    */
+    #define SD_DETECT_PIN   P0_27 
+    // #define KILL_PIN          41
+    #define BTN_EN1         P3_25
+    #define BTN_EN2         P3_26
 
-      #define LCD_PINS_DC     P0_17 // Set as output on init
-      #define LCD_PINS_RS     P1_00  // Pull low for 1s to init
-      // DOGM SPI LCD Support
-      #define DOGLCD_CS       P0_16 
-      #define DOGLCD_MOSI     P0_18 
-      #define DOGLCD_SCK      P0_15 
-      #define DOGLCD_A0       P0_17 
+    #define LCD_PINS_DC     P0_17 // Set as output on init
+    #define LCD_PINS_RS     P1_00  // Pull low for 1s to init
+    // DOGM SPI LCD Support
+    #define DOGLCD_CS       P0_16 
+    #define DOGLCD_MOSI     P0_18 
+    #define DOGLCD_SCK      P0_15 
+    #define DOGLCD_A0       P0_17 
 
-      #define FORCE_SOFT_SPI      // Use this if default of hardware SPI causes display problems
-                                  //   results in LCD soft SPI mode 3, SD soft SPI mode 0
-    #else
-      #define LCD_PINS_RS    P0_16
+    #ifdef LCD_PINS_D5
+      #undef LCD_PINS_D5
+      #define LCD_PINS_D5 -1
+    #endif
+    #ifdef LCD_PINS_D6
+      #undef LCD_PINS_D6
+      #define LCD_PINS_D6 -1
+    #endif
 
-      #define BTN_EN1        P3_25
-      #define BTN_EN2        P3_26
-
-      #define LCD_PINS_ENABLE P0_18
-      #define LCD_PINS_D4    P0_15
-
-      #define LCD_SDSS       P0_28
-      #define SD_DETECT_PIN  P0_27
-
-      #if ENABLED(FYSETC_MINI_12864)
-        #define DOGLCD_CS    P0_18
-        #define DOGLCD_A0    P0_16
-        #define DOGLCD_SCK   P0_07
-        #define DOGLCD_MOSI  P1_20
-        #define FORCE_SOFT_SPI
-
-        #define LCD_BACKLIGHT_PIN -1
-
-        #define FORCE_SOFT_SPI      // Use this if default of hardware SPI causes display problems
-                                    //   results in LCD soft SPI mode 3, SD soft SPI mode 0
-
-        #define LCD_RESET_PIN P0_15   // Must be high or open for LCD to operate normally.
-
-        #if EITHER(FYSETC_MINI_12864_1_2, FYSETC_MINI_12864_2_0)
-          #ifndef RGB_LED_R_PIN
-            #define RGB_LED_R_PIN P0_17
-          #endif
-          #ifndef RGB_LED_G_PIN
-            #define RGB_LED_G_PIN P1_00
-          #endif
-          #ifndef RGB_LED_B_PIN
-            #define RGB_LED_B_PIN P1_22
-          #endif
-        #elif ENABLED(FYSETC_MINI_12864_2_1)
-          #define NEOPIXEL_PIN    P0_17
-        #endif
-
-      #else // !FYSETC_MINI_12864
-
-        #if ENABLED(ULTIPANEL)
-          #define LCD_PINS_D5 P0_17
-          // #define LCD_PINS_D6 P1_00
-          #define LCD_PINS_D7 P1_22
-          // #define LCD_PINS_DC DOGLCD_A0    // Set as output on init
-        #endif
-
-      #endif // !FYSETC_MINI_12864
-
-    #endif // !MKS_OLED
-
+    // #define FORCE_SOFT_SPI   // Use this if default of hardware SPI causes display problems
+                                //   results in LCD soft SPI mode 3, SD soft SPI mode 0
   #endif
 
 #endif // HAS_SPI_LCD
@@ -310,3 +265,6 @@
 //#define PIN_P0_02          P0_02   // AUX1 (Interrupt Capable/ADC/Serial Port 0)
 //#define PIN_P0_03          P0_03   // AUX1 (Interrupt Capable/ADC/Serial Port 0)
 //#define PS_ON_PIN          P1_23   // SERVO P1.23
+#define ORIG_CASE_LIGHT_PIN       P2_00
+#define ORIG_CONTROLLER_FAN_PIN   P0_00
+#define ORIG_E0_AUTO_FAN_PIN      P0_01
