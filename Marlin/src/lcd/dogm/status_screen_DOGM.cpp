@@ -65,7 +65,7 @@
 
 #define DO_DRAW_LOGO (STATUS_LOGO_WIDTH && ENABLED(CUSTOM_STATUS_SCREEN_IMAGE))
 #define DO_DRAW_BED (HAS_HEATED_BED && STATUS_BED_WIDTH && HOTENDS <= 4)
-#define DO_DRAW_CHAMBER (HAS_HEATED_CHAMBER && STATUS_CHAMBER_WIDTH && HOTENDS <= 4)
+#define DO_DRAW_CHAMBER (HAS_TEMP_CHAMBER && STATUS_CHAMBER_WIDTH && HOTENDS <= 4)
 #define DO_DRAW_FAN (HAS_FAN0 && STATUS_FAN_WIDTH && HOTENDS <= 4 && defined(STATUS_FAN_FRAMES))
 
 #define ANIM_HOTEND (HOTENDS && ENABLED(STATUS_HOTEND_ANIM))
@@ -93,7 +93,10 @@
   #define CHAMBER_ALT() false
 #endif
 
-#define MAX_HOTEND_DRAW _MIN(HOTENDS, ((LCD_PIXEL_WIDTH - (STATUS_LOGO_BYTEWIDTH + STATUS_FAN_BYTEWIDTH) * 8) / (STATUS_HEATERS_XSPACE)))
+#if HOTENDS
+  #define MAX_HOTEND_DRAW _MIN(HOTENDS, ((LCD_PIXEL_WIDTH - (STATUS_LOGO_BYTEWIDTH + STATUS_FAN_BYTEWIDTH) * 8) / (STATUS_HEATERS_XSPACE)))
+#endif
+
 #define STATUS_HEATERS_BOT (STATUS_HEATERS_Y + STATUS_HEATERS_HEIGHT - 1)
 
 #if ENABLED(MARLIN_DEV_MODE)
@@ -125,6 +128,11 @@ FORCE_INLINE void _draw_heater_status(const heater_ind_t heater, const bool blin
     constexpr bool isHeat = true;
   #else
     const bool isHeat = IFBED(BED_ALT(), HOTEND_ALT(heater));
+  #endif
+
+  #ifndef STATUS_HOTEND_TEXT_X
+    #define STATUS_HOTEND_TEXT_X(N) 0
+    #define STATUS_HEATERS_Y 0
   #endif
 
   const uint8_t tx = IFBED(STATUS_BED_TEXT_X, STATUS_HOTEND_TEXT_X(heater));
@@ -252,12 +260,16 @@ FORCE_INLINE void _draw_heater_status(const heater_ind_t heater, const bool blin
 	    const float temp = 10 + (millis() >> 8) % CHAMBER_MAXTEMP,
                 target = CHAMBER_MAXTEMP;
     #else
-      const float temp = thermalManager.degChamber(),
-                target = thermalManager.degTargetChamber();
+      const float temp = thermalManager.degChamber();
+      #if HAS_HEATED_CHAMBER
+        const float target = thermalManager.degTargetChamber();
+      #endif
     #endif
+
     #if !HEATER_IDLE_HANDLER
       UNUSED(blink);
     #endif
+
     if (PAGE_UNDER(7)) {
       #if HEATER_IDLE_HANDLER
         const bool is_idle = false, // thermalManager.chamber_idle.timed_out,
@@ -265,13 +277,17 @@ FORCE_INLINE void _draw_heater_status(const heater_ind_t heater, const bool blin
       #else
         constexpr bool dodraw = true;
       #endif
-      if (dodraw) _draw_centered_temp(target + 0.5, STATUS_CHAMBER_TEXT_X, 7);
+      #if HAS_HEATED_CHAMBER
+        if (dodraw) _draw_centered_temp(target + 0.5, STATUS_CHAMBER_TEXT_X, 7);
+      #else
+        UNUSED(dodraw);
+      #endif
     }
     if (PAGE_CONTAINS(28 - INFO_FONT_ASCENT, 28 - 1))
       _draw_centered_temp(temp + 0.5f, STATUS_CHAMBER_TEXT_X, 28);
   }
 
-#endif
+#endif // DO_DRAW_CHAMBER
 
 //
 // Before homing, blink '123' <-> '???'.
@@ -324,22 +340,18 @@ void MarlinUI::draw_status_screen() {
       #if ANIM_BED
         if (thermalManager.isHeatingBed() ^ SHOW_ON_STATE) SBI(new_bits, 7);
       #endif
-      #if DO_DRAW_CHAMBER
+      #if DO_DRAW_CHAMBER && HAS_HEATED_CHAMBER
         if (thermalManager.isHeatingChamber() ^ SHOW_ON_STATE) SBI(new_bits, 6);
       #endif
       heat_bits = new_bits;
     #endif
-    strcpy(xstring, ftostr4sign(LOGICAL_X_POSITION(current_position[X_AXIS])));
-    strcpy(ystring, ftostr4sign(LOGICAL_Y_POSITION(current_position[Y_AXIS])));
-    strcpy(zstring, ftostr52sp( LOGICAL_Z_POSITION(current_position[Z_AXIS])));
+    const xyz_pos_t lpos = current_position.asLogical();
+    strcpy(xstring, ftostr4sign(lpos.x));
+    strcpy(ystring, ftostr4sign(lpos.y));
+    strcpy(zstring, ftostr52sp( lpos.z));
     #if ENABLED(FILAMENT_LCD_DISPLAY)
-      strcpy(wstring, ftostr12ns(filament_width_meas));
-      strcpy(mstring, i16tostr3(100.0 * (
-          parser.volumetric_enabled
-            ? planner.volumetric_area_nominal / planner.volumetric_multiplier[FILAMENT_SENSOR_EXTRUDER_NUM]
-            : planner.volumetric_multiplier[FILAMENT_SENSOR_EXTRUDER_NUM]
-        )
-      ));
+      strcpy(wstring, ftostr12ns(filwidth.measured_mm));
+      strcpy(mstring, i16tostr3(planner.volumetric_percent(parser.volumetric_enabled)));
     #endif
   }
 
@@ -416,8 +428,10 @@ void MarlinUI::draw_status_screen() {
   //
   if (PAGE_UNDER(6 + 1 + 12 + 1 + 6 + 1)) {
     // Extruders
-    for (uint8_t e = 0; e < MAX_HOTEND_DRAW; ++e)
-      _draw_heater_status((heater_ind_t)e, blink);
+    #if HOTENDS
+      for (uint8_t e = 0; e < MAX_HOTEND_DRAW; ++e)
+        _draw_heater_status((heater_ind_t)e, blink);
+    #endif
 
     // Heated bed
     #if DO_DRAW_BED && DISABLED(STATUS_COMBINE_HEATERS) || (HAS_HEATED_BED && ENABLED(STATUS_COMBINE_HEATERS) && HOTENDS <= 4)
