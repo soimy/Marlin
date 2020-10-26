@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
@@ -16,32 +16,47 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
 
 // NOTE - the HAL version of the rrd device uses a generic ST7920 device.  See the
 // file u8g_dev_st7920_128x64_HAL.cpp for the HAL version.
 
+#include "../../inc/MarlinConfigPre.h"
+
+#if !defined(U8G_HAL_LINKS) && ANY(__AVR__, ARDUINO_ARCH_STM32, ARDUINO_ARCH_ESP32)
+
 #include "../../inc/MarlinConfig.h"
 
-#if ENABLED(U8GLIB_ST7920) && !defined(U8G_HAL_LINKS) && !defined(__SAM3X8E__)
+#if ENABLED(U8GLIB_ST7920)
 
 #include "ultralcd_st7920_u8glib_rrd_AVR.h"
 
 #ifndef ST7920_DELAY_1
-  #define ST7920_DELAY_1 CPU_ST7920_DELAY_1
+  #ifdef BOARD_ST7920_DELAY_1
+    #define ST7920_DELAY_1 BOARD_ST7920_DELAY_1
+  #else
+    #define ST7920_DELAY_1 CPU_ST7920_DELAY_1
+  #endif
 #endif
 #ifndef ST7920_DELAY_2
-  #define ST7920_DELAY_2 CPU_ST7920_DELAY_2
+  #ifdef BOARD_ST7920_DELAY_2
+    #define ST7920_DELAY_2 BOARD_ST7920_DELAY_2
+  #else
+    #define ST7920_DELAY_2 CPU_ST7920_DELAY_2
+  #endif
 #endif
 #ifndef ST7920_DELAY_3
-  #define ST7920_DELAY_3 CPU_ST7920_DELAY_3
+  #ifdef BOARD_ST7920_DELAY_3
+    #define ST7920_DELAY_3 BOARD_ST7920_DELAY_3
+  #else
+    #define ST7920_DELAY_3 CPU_ST7920_DELAY_3
+  #endif
 #endif
 
 // Optimize this code with -O3
 #pragma GCC optimize (3)
-
 
 #ifdef ARDUINO_ARCH_STM32F1
   #define ST7920_DAT(V) !!((V) & 0x80)
@@ -135,8 +150,8 @@ uint8_t u8g_dev_rrd_st7920_128x64_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, vo
 }
 
 uint8_t   u8g_dev_st7920_128x64_rrd_buf[(LCD_PIXEL_WIDTH) * (PAGE_HEIGHT) / 8] U8G_NOCOMMON;
-u8g_pb_t  u8g_dev_st7920_128x64_rrd_pb = {{PAGE_HEIGHT, LCD_PIXEL_HEIGHT, 0, 0, 0}, LCD_PIXEL_WIDTH, u8g_dev_st7920_128x64_rrd_buf};
-u8g_dev_t u8g_dev_st7920_128x64_rrd_sw_spi = {u8g_dev_rrd_st7920_128x64_fn, &u8g_dev_st7920_128x64_rrd_pb, &u8g_com_null_fn};
+u8g_pb_t  u8g_dev_st7920_128x64_rrd_pb = { { PAGE_HEIGHT, LCD_PIXEL_HEIGHT, 0, 0, 0 }, LCD_PIXEL_WIDTH, u8g_dev_st7920_128x64_rrd_buf };
+u8g_dev_t u8g_dev_st7920_128x64_rrd_sw_spi = { u8g_dev_rrd_st7920_128x64_fn, &u8g_dev_st7920_128x64_rrd_pb, &u8g_com_null_fn };
 
 #pragma GCC reset_options
 
@@ -149,4 +164,5 @@ u8g_dev_t u8g_dev_st7920_128x64_rrd_sw_spi = {u8g_dev_rrd_st7920_128x64_fn, &u8g
   void ST7920_write_byte(const uint8_t val) { ST7920_WRITE_BYTE(val); }
 #endif
 
-#endif // U8GLIB_ST7920 && !U8G_HAL_LINKS && !__SAM3X8E__
+#endif // U8GLIB_ST7920
+#endif // !U8G_HAL_LINKS && (__AVR__ || ARDUINO_ARCH_STM32 || ARDUINO_ARCH_ESP32)
