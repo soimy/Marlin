@@ -36,7 +36,7 @@
 // Servos
 //
 #define SERVO0_PIN                         P1_23  // SERVO P1.23
-#define SERVO1_PIN                         P2_00  // SERVO P2.0
+// #define SERVO1_PIN                         P2_00  // SERVO P2.0
 
 //
 // Trinamic Stallguard pins
@@ -124,16 +124,17 @@
   #define E0_CS_PIN                        P1_15
 #endif
 
-#define E1_STEP_PIN                        P0_01
-#define E1_DIR_PIN                         P0_00
-#define E1_ENABLE_PIN                      P0_10
-#ifndef E1_CS_PIN
-  #define E1_CS_PIN                        P1_17
-#endif
+// #define E1_STEP_PIN                        P0_01
+// #define E1_DIR_PIN                         P0_00
+// #define E1_ENABLE_PIN                      P0_10
+// #ifndef E1_CS_PIN
+//   #define E1_CS_PIN                        P1_17
+// #endif
 
 //
 // Software SPI pins for TMC2130 stepper drivers
 //
+#define TMC_USE_SW_SPI
 #if ENABLED(TMC_USE_SW_SPI)
   #ifndef TMC_SW_MOSI
     #define TMC_SW_MOSI                    P4_28
@@ -359,3 +360,6 @@
 //#define PIN_P0_02                        P0_02  // AUX1 (Interrupt Capable/ADC/Serial Port 0)
 //#define PIN_P0_03                        P0_03  // AUX1 (Interrupt Capable/ADC/Serial Port 0)
 //#define PS_ON_PIN                        P1_23  // SERVO P1.23
+#define CASE_LIGHT_PIN       P2_00
+#define CONTROLLER_FAN_PIN   P0_00
+#define E0_AUTO_FAN_PIN      P0_01
